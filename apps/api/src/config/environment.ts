@@ -31,7 +31,7 @@ export const config: EnvironmentConfig = {
   jwtRefreshSecret: getEnvVariable('JWT_REFRESH_SECRET'),
   accessTokenExpiry: getEnvVariable('ACCESS_TOKEN_EXPIRY', '15m'),
   refreshTokenExpiry: getEnvVariable('REFRESH_TOKEN_EXPIRY', '7d'),
-  corsOrigin: getEnvVariable('CORS_ORIGIN', 'http://localhost:3000'),
+  corsOrigin: getEnvVariable('CORS_ORIGIN', 'http://localhost:4000'),
   rateLimitWindowMs: parseInt(
     getEnvVariable('RATE_LIMIT_WINDOW_MS', '900000'),
     10

@@ -1,0 +1,27 @@
+{
+  "name": "password-manager-saas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Secure Password Manager SaaS with Zero-Knowledge Architecture",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "npm run dev --workspace=@password-manager/api",
+    "dev:web": "npm run dev --workspace=@password-manager/web",
+    "build": "npm run build --workspaces",
+    "build:api": "npm run build --workspace=@password-manager/api",
+    "build:web": "npm run build --workspace=@password-manager/web",
+    "start:api": "npm run start --workspace=@password-manager/api",
+    "start:web": "npm run start --workspace=@password-manager/web"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
