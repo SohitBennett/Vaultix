@@ -70,7 +70,7 @@ export class AuthService {
     const { email, password } = data;
 
     // Find user
-    const user = await User.findOne({ email }).select('+passwordHash');
+    const user = await User.findOne({ email }).select('+passwordHash +salt');
     if (!user) {
       throw new UnauthorizedError('Invalid email or password');
     }
@@ -95,6 +95,7 @@ export class AuthService {
         id: user._id.toString(),
         email: user.email,
         createdAt: user.createdAt.toISOString(),
+        salt: user.salt, // Return salt for client-side key derivation
       },
       tokens: {
         accessToken,

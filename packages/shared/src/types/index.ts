@@ -15,6 +15,7 @@ export interface AuthResponse {
     id: string;
     email: string;
     createdAt: string;
+    salt: string; // Salt for client-side key derivation
   };
   tokens: {
     accessToken: string;
