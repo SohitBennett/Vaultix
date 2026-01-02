@@ -1,24 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useVault } from '@/contexts/VaultContext';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { VaultItemCard } from '@/components/vault/VaultItemCard';
+import { VaultItemModal } from '@/components/vault/VaultItemModal';
+import { DeleteConfirmModal } from '@/components/vault/DeleteConfirmModal';
 import Link from 'next/link';
-import { keyManager, encrypt, decrypt } from '@/lib/crypto';
+import type { VaultItemDecrypted, CreateVaultItemRequest } from '@/lib/crypto/types';
 
 function VaultContent() {
   const { user, logout, isVaultUnlocked, unlockVault } = useAuth();
+  const {
+    items,
+    isLoading,
+    error,
+    currentPage,
+    totalPages,
+    totalItems,
+    fetchItems,
+    createItem,
+    updateItem,
+    deleteItem,
+    clearError,
+  } = useVault();
+
   const [unlockPassword, setUnlockPassword] = useState('');
   const [unlockError, setUnlockError] = useState('');
   const [isUnlocking, setIsUnlocking] = useState(false);
 
-  // Demo encryption
-  const [demoText, setDemoText] = useState('');
-  const [encryptedDemo, setEncryptedDemo] = useState<{
-    ciphertext: string;
-    iv: string;
-  } | null>(null);
-  const [decryptedDemo, setDecryptedDemo] = useState('');
+  // Modal states
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<VaultItemDecrypted | null>(null);
+  const [deletingItem, setDeletingItem] = useState<{ id: string; name: string } | null>(
+    null
+  );
+
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+
+  // Fetch items when vault is unlocked
+  useEffect(() => {
+    if (isVaultUnlocked) {
+      fetchItems(1, {
+        search: searchTerm || undefined,
+        category: categoryFilter || undefined,
+        favorite: showFavoritesOnly || undefined,
+      });
+    }
+  }, [isVaultUnlocked, searchTerm, categoryFilter, showFavoritesOnly]);
 
   const handleLogout = async () => {
     try {
@@ -45,28 +78,29 @@ function VaultContent() {
     }
   };
 
-  const handleEncryptDemo = async () => {
-    try {
-      const masterKey = keyManager.getMasterKey();
-      const encrypted = await encrypt(demoText, masterKey);
-      setEncryptedDemo(encrypted);
-      setDecryptedDemo('');
-    } catch (error) {
-      alert('Encryption failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
+  const handleSaveItem = async (item: CreateVaultItemRequest) => {
+    if (editingItem) {
+      await updateItem(editingItem.id!, item);
+    } else {
+      await createItem(item);
     }
   };
 
-  const handleDecryptDemo = async () => {
-    if (!encryptedDemo) return;
-    
-    try {
-      const masterKey = keyManager.getMasterKey();
-      const decrypted = await decrypt(encryptedDemo, masterKey);
-      setDecryptedDemo(decrypted);
-    } catch (error) {
-      alert('Decryption failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
+  const handleDelete = async () => {
+    if (deletingItem) {
+      await deleteItem(deletingItem.id);
     }
   };
+
+  const handlePageChange = (page: number) => {
+    fetchItems(page, {
+      search: searchTerm || undefined,
+      category: categoryFilter || undefined,
+      favorite: showFavoritesOnly || undefined,
+    });
+  };
+
+  const categories = Array.from(new Set(items.map((item) => item.category).filter(Boolean)));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,206 +129,208 @@ function VaultContent() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Your Vault</h1>
-          <p className="mt-2 text-gray-600">
-            Manage your passwords securely with end-to-end encryption
-          </p>
-        </div>
-
         {/* Unlock Vault Form */}
-        {!isVaultUnlocked && (
-          <div className="card mb-8 max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Unlock Vault</h2>
-            <p className="text-gray-600 mb-4">
-              Enter your master password to unlock your vault and access encrypted data.
-            </p>
-            <form onSubmit={handleUnlock} className="space-y-4">
-              {unlockError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                  {unlockError}
-                </div>
-              )}
-              <div>
-                <label htmlFor="unlock-password" className="label">
-                  Master Password
-                </label>
-                <input
-                  id="unlock-password"
-                  type="password"
-                  value={unlockPassword}
-                  onChange={(e) => setUnlockPassword(e.target.value)}
-                  className="input"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isUnlocking}
-                className="w-full btn-primary disabled:opacity-50"
-              >
-                {isUnlocking ? 'Unlocking...' : 'Unlock Vault'}
-              </button>
-            </form>
-          </div>
-        )}
-
-        {/* Phase Status */}
-        {isVaultUnlocked ? (
-          <>
-            <div className="card mb-8">
-              <div className="flex items-start">
-                <span className="text-green-500 text-4xl mr-4">✓</span>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                    Phase 2 Complete!
-                  </h2>
-                  <p className="text-gray-600 mb-4">
-                    Client-side encryption is now fully functional. Your vault is unlocked
-                    and ready to use.
-                  </p>
-                  <div className="flex gap-4">
-                    <Link href="/crypto-test" className="btn-primary">
-                      Test Encryption
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Encryption Demo */}
-            <div className="card mb-8">
-              <h2 className="text-xl font-semibold mb-4">🔐 Encryption Demo</h2>
+        {!isVaultUnlocked ? (
+          <div className="max-w-md mx-auto">
+            <div className="card">
+              <h2 className="text-xl font-semibold mb-4">Unlock Vault</h2>
               <p className="text-gray-600 mb-4">
-                Try encrypting and decrypting text with your master key:
+                Enter your master password to unlock your vault and access encrypted data.
               </p>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="label">Text to Encrypt</label>
-                  <textarea
-                    value={demoText}
-                    onChange={(e) => setDemoText(e.target.value)}
-                    className="input"
-                    rows={3}
-                    placeholder="Enter some text to encrypt..."
-                  />
-                </div>
-
-                <button
-                  onClick={handleEncryptDemo}
-                  disabled={!demoText}
-                  className="btn-primary disabled:opacity-50"
-                >
-                  Encrypt Text
-                </button>
-
-                {encryptedDemo && (
-                  <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <label className="label">Encrypted (Ciphertext)</label>
-                      <textarea
-                        value={encryptedDemo.ciphertext}
-                        className="input font-mono text-xs"
-                        rows={3}
-                        readOnly
-                      />
-                    </div>
-                    <div>
-                      <label className="label">IV (Initialization Vector)</label>
-                      <input
-                        value={encryptedDemo.iv}
-                        className="input font-mono text-xs"
-                        readOnly
-                      />
-                    </div>
-
-                    <button
-                      onClick={handleDecryptDemo}
-                      className="btn-secondary"
-                    >
-                      Decrypt Text
-                    </button>
-
-                    {decryptedDemo && (
-                      <div>
-                        <label className="label">Decrypted Result</label>
-                        <textarea
-                          value={decryptedDemo}
-                          className="input bg-green-50 border-green-300"
-                          rows={3}
-                          readOnly
-                        />
-                        {decryptedDemo === demoText && (
-                          <p className="text-green-600 text-sm mt-2">
-                            ✓ Decryption successful! Text matches original.
-                          </p>
-                        )}
-                      </div>
-                    )}
+              <form onSubmit={handleUnlock} className="space-y-4">
+                {unlockError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    {unlockError}
                   </div>
                 )}
-              </div>
+                <div>
+                  <label htmlFor="unlock-password" className="label">
+                    Master Password
+                  </label>
+                  <input
+                    id="unlock-password"
+                    type="password"
+                    value={unlockPassword}
+                    onChange={(e) => setUnlockPassword(e.target.value)}
+                    className="input"
+                    placeholder="Enter your password"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isUnlocking}
+                  className="w-full btn-primary disabled:opacity-50"
+                >
+                  {isUnlocking ? 'Unlocking...' : 'Unlock Vault'}
+                </button>
+              </form>
             </div>
-
-            {/* Phase Progress */}
-            <div className="space-y-4">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start">
-                  <span className="text-green-500 text-xl mr-3">✓</span>
-                  <div>
-                    <h3 className="font-semibold text-green-900">
-                      Phase 1: Authentication
-                    </h3>
-                    <p className="text-sm text-green-700">
-                      User registration, login, and JWT-based auth
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start">
-                  <span className="text-green-500 text-xl mr-3">✓</span>
-                  <div>
-                    <h3 className="font-semibold text-green-900">
-                      Phase 2: Encryption Layer
-                    </h3>
-                    <p className="text-sm text-green-700">
-                      Client-side AES-256-GCM encryption with PBKDF2 key derivation
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start">
-                  <span className="text-blue-500 text-xl mr-3">→</span>
-                  <div>
-                    <h3 className="font-semibold text-blue-900">
-                      Next: Phase 3 - Vault CRUD
-                    </h3>
-                    <p className="text-sm text-blue-700">
-                      Full vault functionality with encrypted storage
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="card text-center py-12">
-            <div className="text-6xl mb-4">🔒</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Vault Locked
-            </h2>
-            <p className="text-gray-600">
-              Please unlock your vault to continue
-            </p>
           </div>
+        ) : (
+          <>
+            {/* Header Actions */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900">Your Vault</h1>
+                  <p className="mt-2 text-gray-600">
+                    {totalItems} {totalItems === 1 ? 'password' : 'passwords'} stored
+                    securely
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setEditingItem(null);
+                    setIsAddModalOpen(true);
+                  }}
+                  className="btn-primary"
+                >
+                  + Add Password
+                </button>
+              </div>
+
+              {/* Filters */}
+              <div className="flex flex-wrap gap-4">
+                <input
+                  type="text"
+                  placeholder="Search passwords..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="input flex-1 min-w-[200px]"
+                />
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="input"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                  className={`px-4 py-2 rounded-lg font-medium ${
+                    showFavoritesOnly
+                      ? 'bg-yellow-500 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  ⭐ Favorites
+                </button>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between">
+                <span>{error}</span>
+                <button onClick={clearError} className="text-red-900 font-bold">
+                  ×
+                </button>
+              </div>
+            )}
+
+            {/* Loading */}
+            {isLoading && (
+              <div className="text-center py-12">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+                <p className="mt-4 text-gray-600">Loading passwords...</p>
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!isLoading && items.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🔐</div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  No Passwords Yet
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Start by adding your first password to the vault
+                </p>
+                <button
+                  onClick={() => {
+                    setEditingItem(null);
+                    setIsAddModalOpen(true);
+                  }}
+                  className="btn-primary"
+                >
+                  + Add Your First Password
+                </button>
+              </div>
+            )}
+
+            {/* Vault Items Grid */}
+            {!isLoading && items.length > 0 && (
+              <>
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {items.map((item) => (
+                    <VaultItemCard
+                      key={item.id}
+                      item={item}
+                      onEdit={(item) => {
+                        setEditingItem(item);
+                        setIsAddModalOpen(true);
+                      }}
+                      onDelete={(id) => {
+                        const item = items.find((i) => i.id === id);
+                        if (item) {
+                          setDeletingItem({ id, name: item.name });
+                        }
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="mt-8 flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    >
+                      Previous
+                    </button>
+                    <span className="px-4 py-2 text-gray-700">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </>
         )}
       </main>
+
+      {/* Modals */}
+      <VaultItemModal
+        isOpen={isAddModalOpen}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setEditingItem(null);
+        }}
+        onSave={handleSaveItem}
+        editItem={editingItem}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!deletingItem}
+        onClose={() => setDeletingItem(null)}
+        onConfirm={handleDelete}
+        itemName={deletingItem?.name || ''}
+      />
     </div>
   );
 }

@@ -4,6 +4,8 @@ import {
   LoginRequest,
   AuthResponse,
   RefreshResponse,
+  VaultItem,
+  VaultListResponse,
 } from '@password-manager/shared';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
@@ -102,6 +104,72 @@ class ApiClient {
       '/auth/me'
     );
     return response.user;
+  }
+
+  // Vault endpoints
+  async getVaultItems(params?: {
+    page?: number;
+    limit?: number;
+    category?: string;
+    favorite?: boolean;
+    search?: string;
+    sortBy?: 'name' | 'createdAt' | 'updatedAt';
+    sortOrder?: 'asc' | 'desc';
+  }): Promise<VaultListResponse> {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.category) queryParams.append('category', params.category);
+    if (params?.favorite !== undefined)
+      queryParams.append('favorite', params.favorite.toString());
+    if (params?.search) queryParams.append('search', params.search);
+    if (params?.sortBy) queryParams.append('sortBy', params.sortBy);
+    if (params?.sortOrder) queryParams.append('sortOrder', params.sortOrder);
+
+    const query = queryParams.toString();
+    const endpoint = `/vault${query ? `?${query}` : ''}`;
+
+    return this.request<VaultListResponse>(endpoint);
+  }
+
+  async getVaultItem(id: string): Promise<VaultItem> {
+    const response = await this.request<{ item: VaultItem }>(`/vault/${id}`);
+    return response.item;
+  }
+
+  async createVaultItem(
+    item: Omit<VaultItem, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<VaultItem> {
+    const response = await this.request<{ item: VaultItem }>('/vault', {
+      method: 'POST',
+      body: JSON.stringify(item),
+    });
+    return response.item;
+  }
+
+  async updateVaultItem(
+    id: string,
+    updates: Partial<Omit<VaultItem, 'id' | 'createdAt' | 'updatedAt'>>
+  ): Promise<VaultItem> {
+    const response = await this.request<{ item: VaultItem }>(`/vault/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+    return response.item;
+  }
+
+  async deleteVaultItem(id: string): Promise<void> {
+    await this.request(`/vault/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getVaultStats(): Promise<{
+    totalItems: number;
+    favoriteItems: number;
+    categoryCounts: { category: string; count: number }[];
+  }> {
+    return this.request('/vault/stats');
   }
 }
 

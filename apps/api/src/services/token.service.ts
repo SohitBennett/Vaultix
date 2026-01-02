@@ -120,7 +120,7 @@ export class TokenService {
       case 'd':
         return value * 86400;
       default:
-        return 900; // Default 15 minutes
+        return 86400; // Default 15 minutes
     }
   }
 }

@@ -7,6 +7,7 @@ import { connectDatabase } from './config/database';
 import { generalLimiter } from './middleware/rate-limit.middleware';
 import { errorHandler } from './middleware/error-handler.middleware';
 import authRoutes from './routes/auth.routes';
+import vaultRoutes from './routes/vault.routes';
 
 const app: Application = express();
 
@@ -47,6 +48,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 // API routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/vault', vaultRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
@@ -73,7 +75,7 @@ const startServer = async (): Promise<void> => {
       console.log(`
 ╔══════════════════════════════════════════════╗
 ║                                              ║
-║   🔐 Password Manager API                    ║
+║   Password Manager API                       ║
 ║                                              ║
 ║   Status: Running                            ║
 ║   Port: ${config.port}                       ║
