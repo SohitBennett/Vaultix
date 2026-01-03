@@ -15,7 +15,8 @@ import {
 
 export class AuthService {
   // Register new user
-  static async register(data: RegisterRequest): Promise<AuthResponse> {
+  // UPDATED register method (around line 25)
+  static async register(data: RegisterRequest): Promise<AuthResponse & { refreshToken: string }> {
     const { email, password, passwordConfirm } = data;
 
     // Validate passwords match
@@ -56,17 +57,18 @@ export class AuthService {
         id: user._id.toString(),
         email: user.email,
         createdAt: user.createdAt.toISOString(),
+        salt, // Include salt for client-side key derivation
       },
       tokens: {
         accessToken,
         expiresIn: TokenService.getAccessTokenExpiryInSeconds(),
       },
-      // Refresh token will be set as httpOnly cookie by controller
-    } as any; // Will add refreshToken in controller
+      refreshToken, // ✅ Return the refresh token
+    };
   }
 
-  // Login user
-  static async login(data: LoginRequest): Promise<AuthResponse> {
+  // UPDATED login method (around line 68)
+  static async login(data: LoginRequest): Promise<AuthResponse & { refreshToken: string }> {
     const { email, password } = data;
 
     // Find user
@@ -101,7 +103,8 @@ export class AuthService {
         accessToken,
         expiresIn: TokenService.getAccessTokenExpiryInSeconds(),
       },
-    } as any; // Will add refreshToken in controller
+      refreshToken, // ✅ Return the refresh token
+    };
   }
 
   // Refresh access token
@@ -109,18 +112,40 @@ export class AuthService {
     refreshToken: string
   ): Promise<{ accessToken: string; refreshToken: string; expiresIn: number }> {
     // Verify refresh token
+    // const payload = await TokenService.verifyRefreshToken(refreshToken);
+
+    // // Revoke old refresh token
+    // await TokenService.revokeRefreshToken(payload.tokenId);
+
+    // // Get user
+    // const user = await User.findById(payload.userId);
+    // if (!user) {
+    //   throw new UnauthorizedError('User not found');
+    // }
+
+    // // Generate new tokens
+    // const newAccessToken = TokenService.generateAccessToken(
+    //   user._id.toString(),
+    //   user.email
+    // );
+    // const newRefreshToken = await TokenService.generateRefreshToken(
+    //   user._id.toString()
+    // );
+
+    // return {
+    //   accessToken: newAccessToken,
+    //   refreshToken: newRefreshToken,
+    //   expiresIn: TokenService.getAccessTokenExpiryInSeconds(),
+    // };
+
     const payload = await TokenService.verifyRefreshToken(refreshToken);
 
-    // Revoke old refresh token
-    await TokenService.revokeRefreshToken(payload.tokenId);
-
-    // Get user
     const user = await User.findById(payload.userId);
     if (!user) {
       throw new UnauthorizedError('User not found');
     }
 
-    // Generate new tokens
+    // Generate new tokens FIRST
     const newAccessToken = TokenService.generateAccessToken(
       user._id.toString(),
       user.email
@@ -128,6 +153,9 @@ export class AuthService {
     const newRefreshToken = await TokenService.generateRefreshToken(
       user._id.toString()
     );
+
+    // THEN revoke old one
+    await TokenService.revokeRefreshToken(payload.tokenId);
 
     return {
       accessToken: newAccessToken,

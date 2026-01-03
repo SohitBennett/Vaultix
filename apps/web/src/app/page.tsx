@@ -61,10 +61,16 @@ export default function Home() {
               <h3 className="text-xl font-semibold mb-2">
                 Password Generator
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 mb-4">
                 Generate cryptographically secure passwords with customizable
                 length and character sets.
               </p>
+              <Link
+                href="/generator"
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                Try Generator →
+              </Link>
             </div>
             <div className="card">
               <div className="text-4xl mb-4">📤</div>

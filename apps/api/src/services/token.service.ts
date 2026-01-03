@@ -77,6 +77,10 @@ export class TokenService {
         throw new UnauthorizedError('Refresh token has been revoked');
       }
 
+      if (tokenDoc.expiresAt < new Date()) {
+        throw new UnauthorizedError('Refresh token expired');
+      }
+
       return payload;
     } catch (error) {
       if (error instanceof UnauthorizedError) {

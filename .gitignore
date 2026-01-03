@@ -56,3 +56,16 @@ yarn-error.log*
 # Misc
 .vercel
 .turbo
+
+# Code file
+code*.txt
+
+# Repomix outputs
+repomix-output.txt
+repomix-output.xml
+repomix-output.md
+repo-map.txt
+codebase-*.txt
+vaultix-*.txt
+*-repomix.txt
+*.repomix.*

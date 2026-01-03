@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { VaultItemDecrypted, CreateVaultItemRequest } from '@/lib/crypto/types';
+import { PasswordGenerator } from '@/components/generator/PasswordGenerator';
 
 interface VaultItemModalProps {
   isOpen: boolean;
@@ -37,6 +38,7 @@ export function VaultItemModal({
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showGenerator, setShowGenerator] = useState(false);
 
   useEffect(() => {
     if (editItem) {
@@ -61,6 +63,7 @@ export function VaultItemModal({
       });
     }
     setError('');
+    setShowGenerator(false);
   }, [editItem, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,6 +90,10 @@ export function VaultItemModal({
       [name]:
         type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
+  };
+
+  const handlePasswordGenerated = (password: string) => {
+    setFormData((prev) => ({ ...prev, password }));
   };
 
   if (!isOpen) return null;
@@ -152,9 +159,29 @@ export function VaultItemModal({
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="label">
-              Password *
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label htmlFor="password" className="label">
+                Password *
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowGenerator(!showGenerator)}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                {showGenerator ? '✕ Close Generator' : '🎲 Generate Password'}
+              </button>
+            </div>
+
+            {showGenerator && (
+              <div className="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <PasswordGenerator
+                  onPasswordGenerated={handlePasswordGenerated}
+                  showCopyButton={false}
+                  compact={true}
+                />
+              </div>
+            )}
+
             <input
               id="password"
               name="password"
