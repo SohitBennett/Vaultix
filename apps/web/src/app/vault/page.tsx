@@ -7,6 +7,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { VaultItemCard } from '@/components/vault/VaultItemCard';
 import { VaultItemModal } from '@/components/vault/VaultItemModal';
 import { DeleteConfirmModal } from '@/components/vault/DeleteConfirmModal';
+import { ExportConfirmModal } from '@/components/vault/ExportConfirmModal';
 import Link from 'next/link';
 import type { VaultItemDecrypted, CreateVaultItemRequest } from '@/lib/crypto/types';
 
@@ -24,6 +25,7 @@ function VaultContent() {
     updateItem,
     deleteItem,
     clearError,
+    exportToCSV,
   } = useVault();
 
   const [unlockPassword, setUnlockPassword] = useState('');
@@ -36,6 +38,7 @@ function VaultContent() {
   const [deletingItem, setDeletingItem] = useState<{ id: string; name: string } | null>(
     null
   );
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -98,6 +101,16 @@ function VaultContent() {
       category: categoryFilter || undefined,
       favorite: showFavoritesOnly || undefined,
     });
+  };
+
+  const handleExport = async () => {
+    try {
+      await exportToCSV();
+      setIsExportModalOpen(false);
+    } catch (error) {
+      console.error('Export error:', error);
+      // Error is already set in context
+    }
   };
 
   const categories = Array.from(new Set(items.map((item) => item.category).filter(Boolean)));
@@ -179,15 +192,24 @@ function VaultContent() {
                     securely
                   </p>
                 </div>
-                <button
-                  onClick={() => {
-                    setEditingItem(null);
-                    setIsAddModalOpen(true);
-                  }}
-                  className="btn-primary"
-                >
-                  + Add Password
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setIsExportModalOpen(true)}
+                    disabled={items.length === 0}
+                    className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    📥 Export CSV
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditingItem(null);
+                      setIsAddModalOpen(true);
+                    }}
+                    className="btn-primary"
+                  >
+                    + Add Password
+                  </button>
+                </div>
               </div>
 
               {/* Filters */}
@@ -330,6 +352,13 @@ function VaultContent() {
         onClose={() => setDeletingItem(null)}
         onConfirm={handleDelete}
         itemName={deletingItem?.name || ''}
+      />
+
+      <ExportConfirmModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        onConfirm={handleExport}
+        itemCount={items.length}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import {
   decryptVaultItemFull,
   prepareVaultItemUpdate,
 } from '@/lib/crypto';
+import { generateCSV, downloadCSV, validateExportItems } from '@/lib/utils/csv-export';
 import type {
   VaultItem,
   VaultItemDecrypted,
@@ -26,6 +27,7 @@ interface VaultContextType {
   deleteItem: (id: string) => Promise<void>;
   refreshItems: () => Promise<void>;
   clearError: () => void;
+  exportToCSV: () => Promise<void>;
 }
 
 interface VaultFilters {
@@ -178,6 +180,25 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({
     setError(null);
   }, []);
 
+  const exportToCSV = useCallback(async () => {
+    try {
+      // Validate items
+      const validation = validateExportItems(items);
+      if (!validation.valid) {
+        throw new Error(validation.error || 'Export validation failed');
+      }
+
+      // Generate CSV from decrypted items
+      const csvContent = generateCSV(items);
+
+      // Download the file
+      downloadCSV(csvContent);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to export vault');
+      throw err;
+    }
+  }, [items]);
+
   return (
     <VaultContext.Provider
       value={{
@@ -193,6 +214,7 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteItem,
         refreshItems,
         clearError,
+        exportToCSV,
       }}
     >
       {children}
