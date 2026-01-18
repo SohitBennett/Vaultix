@@ -58,4 +58,7 @@ export {
   encryptVaultItem,
   decryptVaultItem,
   prepareVaultItemForStorage,
+  decryptVaultItemFull,
+  decryptVaultItems,
+  prepareVaultItemUpdate,
 } from './vault-crypto';
