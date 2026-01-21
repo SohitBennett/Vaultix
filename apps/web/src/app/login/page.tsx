@@ -26,42 +26,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
+    <div className="gemini-login-container">
+      {/* Animated Background */}
+      <div className="gemini-bg-gradient"></div>
+      <div className="gemini-bg-overlay"></div>
+      
+      <div className="gemini-content-wrapper">
         {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center">
-            <span className="text-4xl">🔐</span>
-            <span className="ml-2 text-2xl font-bold text-gray-900">
-              Password Manager
-            </span>
+        <div className="gemini-header">
+          <Link href="/" className="gemini-logo-link">
+            <div className="gemini-logo-icon">🔐</div>
+            <span className="gemini-logo-text">Vaultix</span>
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Or{' '}
-            <Link
-              href="/register"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              create a new account
-            </Link>
+          <h1 className="gemini-title">Welcome back</h1>
+          <p className="gemini-subtitle">
+            Sign in to continue to your vault
           </p>
         </div>
 
-        {/* Form */}
-        <div className="card">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Form Card */}
+        <div className="gemini-card">
+          <form onSubmit={handleSubmit} className="gemini-form">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {error}
+              <div className="gemini-error">
+                <svg className="gemini-error-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span>{error}</span>
               </div>
             )}
 
-            <div>
-              <label htmlFor="email" className="label">
-                Email address
+            <div className="gemini-input-group">
+              <label htmlFor="email" className="gemini-label">
+                Email
               </label>
               <input
                 id="email"
@@ -71,13 +68,13 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input"
-                placeholder="you@example.com"
+                className="gemini-input"
+                placeholder="Enter your email"
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="label">
+            <div className="gemini-input-group">
+              <label htmlFor="password" className="gemini-label">
                 Password
               </label>
               <input
@@ -88,26 +85,45 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input"
-                placeholder="••••••••"
+                className="gemini-input"
+                placeholder="Enter your password"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full btn-primary py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="gemini-submit-btn"
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? (
+                <>
+                  <div className="gemini-spinner"></div>
+                  <span>Signing in...</span>
+                </>
+              ) : (
+                'Continue'
+              )}
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="gemini-divider">
+            <span>New to Vaultix?</span>
+          </div>
+
+          {/* Register Link */}
+          <Link href="/register" className="gemini-register-link">
+            Create an account
+          </Link>
         </div>
 
         {/* Security Note */}
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="gemini-footer">
+          <svg className="gemini-footer-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+          </svg>
           <p>
-            🔒 Your password is encrypted before leaving your device. We never
-            see it.
+            Your password is encrypted before leaving your device. We never see it.
           </p>
         </div>
       </div>
