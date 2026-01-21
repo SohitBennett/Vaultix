@@ -59,41 +59,40 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
+    <div className="claude-login-container">
+      <div className="claude-content-wrapper">
         {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center">
-            <span className="text-4xl">🔐</span>
-            <span className="ml-2 text-2xl font-bold text-gray-900">
-              Password Manager
-            </span>
+        <div className="claude-header">
+          <Link href="/" className="claude-logo-link">
+            <svg className="claude-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="claude-logo-text">Vaultix</span>
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link
-              href="/login"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              Sign in
-            </Link>
-          </p>
         </div>
 
-        {/* Form */}
-        <div className="card">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Form Card */}
+        <div className="claude-card">
+          <div className="claude-card-header">
+            <h1 className="claude-title">Create your account</h1>
+            <p className="claude-subtitle">
+              Start securing your passwords today
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="claude-form">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {error}
+              <div className="claude-error">
+                <svg className="claude-error-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span>{error}</span>
               </div>
             )}
 
-            <div>
-              <label htmlFor="email" className="label">
+            <div className="claude-input-group">
+              <label htmlFor="email" className="claude-label">
                 Email address
               </label>
               <input
@@ -104,13 +103,13 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input"
+                className="claude-input"
                 placeholder="you@example.com"
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="label">
+            <div className="claude-input-group">
+              <label htmlFor="password" className="claude-label">
                 Password
               </label>
               <input
@@ -121,17 +120,16 @@ export default function RegisterPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input"
-                placeholder="••••••••"
+                className="claude-input"
+                placeholder="Create a strong password"
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Must be at least 12 characters with uppercase, lowercase,
-                number, and special character
+              <p className="claude-input-hint">
+                Must be at least 12 characters with uppercase, lowercase, number, and special character
               </p>
             </div>
 
-            <div>
-              <label htmlFor="passwordConfirm" className="label">
+            <div className="claude-input-group">
+              <label htmlFor="passwordConfirm" className="claude-label">
                 Confirm password
               </label>
               <input
@@ -142,26 +140,46 @@ export default function RegisterPage() {
                 required
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
-                className="input"
-                placeholder="••••••••"
+                className="claude-input"
+                placeholder="Re-enter your password"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full btn-primary py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="claude-submit-btn"
             >
-              {isLoading ? 'Creating account...' : 'Create account'}
+              {isLoading ? (
+                <>
+                  <div className="claude-spinner"></div>
+                  <span>Creating account...</span>
+                </>
+              ) : (
+                'Create account'
+              )}
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="claude-divider">
+            <span>Already have an account?</span>
+          </div>
+
+          {/* Login Link */}
+          <Link href="/login" className="claude-register-link">
+            Sign in
+          </Link>
         </div>
 
         {/* Security Note */}
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="claude-footer">
+          <svg className="claude-footer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
           <p>
-            🔒 Zero-knowledge encryption. Your master password never leaves your
-            device.
+            Zero-knowledge encryption. Your master password never leaves your device.
           </p>
         </div>
       </div>

@@ -2,80 +2,100 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="claude-landing-container">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">🔐</span>
-            <span className="ml-2 text-xl font-bold text-gray-900">
-              Password Manager
-            </span>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/login" className="btn-secondary">
-              Login
+      <header className="claude-landing-header">
+        <nav className="claude-landing-nav">
+          <Link href="/" className="claude-landing-logo">
+            <svg className="claude-landing-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="claude-landing-logo-text">Vaultix</span>
+          </Link>
+          <div className="claude-landing-nav-buttons">
+            <Link href="/login" className="claude-landing-btn-secondary">
+              Sign in
             </Link>
-            <Link href="/register" className="btn-primary">
-              Get Started
+            <Link href="/register" className="claude-landing-btn-primary">
+              Get started
             </Link>
           </div>
         </nav>
       </header>
 
       {/* Hero Section */}
-      <main className="flex-1 flex items-center justify-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Secure Password Management
+      <main className="claude-landing-hero">
+        <div className="claude-landing-hero-content">
+          <h1 className="claude-landing-hero-title">
+            Secure password management
             <br />
-            <span className="text-blue-600">Made Simple</span>
+            <span className="claude-landing-hero-title-accent">made simple</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="claude-landing-hero-subtitle">
             Store your passwords with military-grade encryption. Zero-knowledge
             architecture means only you can access your data.
           </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/register" className="btn-primary text-lg px-8 py-3">
-              Create Free Account
+          <div className="claude-landing-hero-buttons">
+            <Link href="/register" className="claude-landing-hero-btn-primary">
+              Create free account
             </Link>
-            <Link href="/login" className="btn-secondary text-lg px-8 py-3">
-              Sign In
+            <Link href="/login" className="claude-landing-hero-btn-secondary">
+              Sign in
             </Link>
           </div>
 
           {/* Features */}
-          <div className="mt-20 grid md:grid-cols-3 gap-8">
-            <div className="card">
-              <div className="text-4xl mb-4">🔒</div>
-              <h3 className="text-xl font-semibold mb-2">
-                Client-Side Encryption
+          <div className="claude-landing-features">
+            <div className="claude-landing-feature-card">
+              <div className="claude-landing-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <h3 className="claude-landing-feature-title">
+                Client-side encryption
               </h3>
-              <p className="text-gray-600">
+              <p className="claude-landing-feature-description">
                 Your passwords are encrypted in your browser before being sent
                 to our servers. We never see your data.
               </p>
             </div>
-            <div className="card">
-              <div className="text-4xl mb-4">🎲</div>
-              <h3 className="text-xl font-semibold mb-2">
-                Password Generator
+
+            <div className="claude-landing-feature-card">
+              <div className="claude-landing-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                  <line x1="12" y1="19" x2="12" y2="22" />
+                </svg>
+              </div>
+              <h3 className="claude-landing-feature-title">
+                Password generator
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="claude-landing-feature-description">
                 Generate cryptographically secure passwords with customizable
                 length and character sets.
               </p>
               <Link
                 href="/generator"
-                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                className="claude-landing-feature-link"
               >
-                Try Generator →
+                Try generator →
               </Link>
             </div>
-            <div className="card">
-              <div className="text-4xl mb-4">📤</div>
-              <h3 className="text-xl font-semibold mb-2">Easy Export</h3>
-              <p className="text-gray-600">
+
+            <div className="claude-landing-feature-card">
+              <div className="claude-landing-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              </div>
+              <h3 className="claude-landing-feature-title">Easy export</h3>
+              <p className="claude-landing-feature-description">
                 Export your passwords to CSV anytime. Your data is always yours
                 to keep.
               </p>
@@ -85,9 +105,9 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 py-6 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
-          <p>&copy; 2024 Password Manager. All rights reserved.</p>
+      <footer className="claude-landing-footer">
+        <div className="claude-landing-footer-content">
+          <p>&copy; 2024 Vaultix. All rights reserved.</p>
         </div>
       </footer>
     </div>

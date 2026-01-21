@@ -166,6 +166,138 @@
   .claude-footer p {
     @apply text-center;
   }
+
+  .claude-input-hint {
+    @apply mt-1.5 text-xs text-gray-500;
+  }
+
+  /* Landing Page Styles */
+  .claude-landing-container {
+    @apply min-h-screen flex flex-col bg-white;
+  }
+
+  .claude-landing-header {
+    @apply border-b border-gray-200;
+  }
+
+  .claude-landing-nav {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between;
+  }
+
+  .claude-landing-logo {
+    @apply inline-flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-70;
+  }
+
+  .claude-landing-logo-icon {
+    @apply w-6 h-6 text-gray-900;
+  }
+
+  .claude-landing-logo-text {
+    @apply text-lg font-semibold text-gray-900;
+    letter-spacing: -0.01em;
+  }
+
+  .claude-landing-nav-buttons {
+    @apply flex gap-3;
+  }
+
+  .claude-landing-btn-secondary {
+    @apply px-4 py-2 text-sm font-medium text-gray-900 rounded-lg;
+    @apply border border-gray-300 hover:bg-gray-50 hover:border-gray-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply transition-all duration-150;
+  }
+
+  .claude-landing-btn-primary {
+    @apply px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg;
+    @apply hover:bg-gray-800;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply transition-all duration-150;
+  }
+
+  .claude-landing-hero {
+    @apply flex-1 flex items-center justify-center py-20 px-4;
+  }
+
+  .claude-landing-hero-content {
+    @apply max-w-4xl mx-auto text-center;
+  }
+
+  .claude-landing-hero-title {
+    @apply text-5xl sm:text-6xl font-semibold text-gray-900 mb-6;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .claude-landing-hero-title-accent {
+    @apply text-gray-600;
+  }
+
+  .claude-landing-hero-subtitle {
+    @apply text-lg text-gray-600 mb-10 max-w-2xl mx-auto;
+    line-height: 1.6;
+  }
+
+  .claude-landing-hero-buttons {
+    @apply flex gap-4 justify-center mb-20;
+  }
+
+  .claude-landing-hero-btn-primary {
+    @apply px-6 py-3 text-base font-medium text-white bg-gray-900 rounded-lg;
+    @apply hover:bg-gray-800;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply transition-all duration-150;
+  }
+
+  .claude-landing-hero-btn-secondary {
+    @apply px-6 py-3 text-base font-medium text-gray-900 rounded-lg;
+    @apply border border-gray-300 hover:bg-gray-50 hover:border-gray-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply transition-all duration-150;
+  }
+
+  .claude-landing-features {
+    @apply grid md:grid-cols-3 gap-6 max-w-5xl mx-auto;
+  }
+
+  .claude-landing-feature-card {
+    @apply bg-white border border-gray-200 rounded-xl p-6;
+    @apply transition-all duration-200 hover:border-gray-300 hover:shadow-sm;
+  }
+
+  .claude-landing-feature-icon {
+    @apply w-10 h-10 text-gray-900 mb-4;
+  }
+
+  .claude-landing-feature-icon svg {
+    @apply w-full h-full;
+  }
+
+  .claude-landing-feature-title {
+    @apply text-lg font-semibold text-gray-900 mb-2;
+    letter-spacing: -0.01em;
+  }
+
+  .claude-landing-feature-description {
+    @apply text-sm text-gray-600 leading-relaxed;
+  }
+
+  .claude-landing-feature-link {
+    @apply inline-block mt-3 text-sm font-medium text-gray-900;
+    @apply hover:text-gray-700 transition-colors duration-150;
+  }
+
+  .claude-landing-footer {
+    @apply border-t border-gray-200 py-8 mt-20;
+  }
+
+  .claude-landing-footer-content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center;
+  }
+
+  .claude-landing-footer-content p {
+    @apply text-xs text-gray-500;
+  }
 }
 
 @keyframes fadeIn {
