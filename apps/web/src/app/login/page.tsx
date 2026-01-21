@@ -26,39 +26,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="gemini-login-container">
-      {/* Animated Background */}
-      <div className="gemini-bg-gradient"></div>
-      <div className="gemini-bg-overlay"></div>
-      
-      <div className="gemini-content-wrapper">
+    <div className="claude-login-container">
+      <div className="claude-content-wrapper">
         {/* Header */}
-        <div className="gemini-header">
-          <Link href="/" className="gemini-logo-link">
-            <div className="gemini-logo-icon">🔐</div>
-            <span className="gemini-logo-text">Vaultix</span>
+        <div className="claude-header">
+          <Link href="/" className="claude-logo-link">
+            <svg className="claude-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="claude-logo-text">Vaultix</span>
           </Link>
-          <h1 className="gemini-title">Welcome back</h1>
-          <p className="gemini-subtitle">
-            Sign in to continue to your vault
-          </p>
         </div>
 
         {/* Form Card */}
-        <div className="gemini-card">
-          <form onSubmit={handleSubmit} className="gemini-form">
+        <div className="claude-card">
+          <div className="claude-card-header">
+            <h1 className="claude-title">Welcome back</h1>
+            <p className="claude-subtitle">
+              Sign in to your account
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="claude-form">
             {error && (
-              <div className="gemini-error">
-                <svg className="gemini-error-icon" fill="currentColor" viewBox="0 0 20 20">
+              <div className="claude-error">
+                <svg className="claude-error-icon" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
                 <span>{error}</span>
               </div>
             )}
 
-            <div className="gemini-input-group">
-              <label htmlFor="email" className="gemini-label">
-                Email
+            <div className="claude-input-group">
+              <label htmlFor="email" className="claude-label">
+                Email address
               </label>
               <input
                 id="email"
@@ -68,13 +70,13 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="gemini-input"
-                placeholder="Enter your email"
+                className="claude-input"
+                placeholder="you@example.com"
               />
             </div>
 
-            <div className="gemini-input-group">
-              <label htmlFor="password" className="gemini-label">
+            <div className="claude-input-group">
+              <label htmlFor="password" className="claude-label">
                 Password
               </label>
               <input
@@ -85,7 +87,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="gemini-input"
+                className="claude-input"
                 placeholder="Enter your password"
               />
             </div>
@@ -93,11 +95,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="gemini-submit-btn"
+              className="claude-submit-btn"
             >
               {isLoading ? (
                 <>
-                  <div className="gemini-spinner"></div>
+                  <div className="claude-spinner"></div>
                   <span>Signing in...</span>
                 </>
               ) : (
@@ -107,20 +109,21 @@ export default function LoginPage() {
           </form>
 
           {/* Divider */}
-          <div className="gemini-divider">
-            <span>New to Vaultix?</span>
+          <div className="claude-divider">
+            <span>Don't have an account?</span>
           </div>
 
           {/* Register Link */}
-          <Link href="/register" className="gemini-register-link">
-            Create an account
+          <Link href="/register" className="claude-register-link">
+            Create account
           </Link>
         </div>
 
         {/* Security Note */}
-        <div className="gemini-footer">
-          <svg className="gemini-footer-icon" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+        <div className="claude-footer">
+          <svg className="claude-footer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
           <p>
             Your password is encrypted before leaving your device. We never see it.
