@@ -16,7 +16,7 @@ export const PASSWORD_PRESETS: PasswordPreset[] = [
     id: 'strong',
     name: 'Strong',
     description: 'Highly secure with all character types',
-    icon: '🔒',
+    icon: 'Lock',
     options: {
       length: 16,
       uppercase: true,
@@ -30,7 +30,7 @@ export const PASSWORD_PRESETS: PasswordPreset[] = [
     id: 'maximum',
     name: 'Maximum Security',
     description: 'Ultra-secure 32 character password',
-    icon: '🛡️',
+    icon: 'Shield',
     options: {
       length: 32,
       uppercase: true,
@@ -44,7 +44,7 @@ export const PASSWORD_PRESETS: PasswordPreset[] = [
     id: 'memorable',
     name: 'Memorable',
     description: 'Easy to remember without symbols',
-    icon: '💭',
+    icon: 'Lightbulb',
     options: {
       length: 12,
       uppercase: true,
@@ -58,7 +58,7 @@ export const PASSWORD_PRESETS: PasswordPreset[] = [
     id: 'pin',
     name: 'PIN',
     description: 'Numeric only (6 digits)',
-    icon: '🔢',
+    icon: 'Hash',
     options: {
       length: 6,
       uppercase: false,
@@ -72,7 +72,7 @@ export const PASSWORD_PRESETS: PasswordPreset[] = [
     id: 'basic',
     name: 'Basic',
     description: 'Simple alphanumeric password',
-    icon: '🔑',
+    icon: 'Key',
     options: {
       length: 12,
       uppercase: true,
@@ -86,7 +86,7 @@ export const PASSWORD_PRESETS: PasswordPreset[] = [
     id: 'custom',
     name: 'Custom',
     description: 'Customize all settings',
-    icon: '⚙️',
+    icon: 'Settings',
     options: {
       length: 16,
       uppercase: true,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { RefreshCw, Copy, Check, Lock, Shield, Lightbulb, Hash, Key, Settings } from 'lucide-react';
 import {
   generatePassword,
   calculatePasswordStrength,
@@ -8,6 +9,16 @@ import {
   type PasswordOptions,
 } from '@/lib/password-generator/generator';
 import { PASSWORD_PRESETS, getDefaultPreset } from '@/lib/password-generator/presets';
+
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Lock,
+  Shield,
+  Lightbulb,
+  Hash,
+  Key,
+  Settings,
+};
 
 interface PasswordGeneratorProps {
   onPasswordGenerated?: (password: string) => void;
@@ -132,7 +143,7 @@ export function PasswordGenerator({
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
             title="Generate new password"
           >
-            🔄
+            <RefreshCw className="w-4 h-4" />
           </button>
           {showCopyButton && (
             <button
@@ -140,7 +151,7 @@ export function PasswordGenerator({
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
               title="Copy to clipboard"
             >
-              {copied ? '✓' : '📋'}
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </button>
           )}
         </div>
@@ -166,23 +177,26 @@ export function PasswordGenerator({
       <div>
         <label className="label">Presets</label>
         <div className="grid grid-cols-2 gap-2">
-          {PASSWORD_PRESETS.map(preset => (
-            <button
-              key={preset.id}
-              onClick={() => handlePresetChange(preset.id)}
-              className={`p-3 rounded-lg border-2 text-left transition-colors ${
-                selectedPreset === preset.id
-                  ? 'border-blue-600 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xl">{preset.icon}</span>
-                <span className="font-semibold">{preset.name}</span>
-              </div>
-              <p className="text-xs text-gray-600">{preset.description}</p>
-            </button>
-          ))}
+          {PASSWORD_PRESETS.map(preset => {
+            const IconComponent = iconMap[preset.icon];
+            return (
+              <button
+                key={preset.id}
+                onClick={() => handlePresetChange(preset.id)}
+                className={`p-3 rounded-lg border-2 text-left transition-colors ${
+                  selectedPreset === preset.id
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  {IconComponent && <IconComponent className="w-5 h-5 text-gray-700" />}
+                  <span className="font-semibold">{preset.name}</span>
+                </div>
+                <p className="text-xs text-gray-600">{preset.description}</p>
+              </button>
+            );
+          })}
         </div>
       </div>
 

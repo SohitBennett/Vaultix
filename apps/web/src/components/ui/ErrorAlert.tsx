@@ -1,5 +1,7 @@
 'use client';
 
+import { XCircle, AlertTriangle, Info } from 'lucide-react';
+
 interface ErrorAlertProps {
   message: string;
   onDismiss?: () => void;
@@ -16,23 +18,24 @@ export function ErrorAlert({
       bg: 'bg-red-50',
       border: 'border-red-200',
       text: 'text-red-700',
-      icon: '❌',
+      icon: XCircle,
     },
     warning: {
       bg: 'bg-yellow-50',
       border: 'border-yellow-200',
       text: 'text-yellow-800',
-      icon: '⚠️',
+      icon: AlertTriangle,
     },
     info: {
       bg: 'bg-blue-50',
       border: 'border-blue-200',
       text: 'text-blue-700',
-      icon: 'ℹ️',
+      icon: Info,
     },
   };
 
   const style = styles[type];
+  const IconComponent = style.icon;
 
   return (
     <div
@@ -40,7 +43,7 @@ export function ErrorAlert({
       role="alert"
     >
       <div className="flex items-center">
-        <span className="text-xl mr-3">{style.icon}</span>
+        <IconComponent className="w-5 h-5 mr-3" />
         <span>{message}</span>
       </div>
       {onDismiss && (

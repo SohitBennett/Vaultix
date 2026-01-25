@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { PasswordGenerator } from '@/components/generator/PasswordGenerator';
 import { generatePassphrase, generatePIN } from '@/lib/password-generator/generator';
+import { Dices, Lock, Lightbulb, Target, Copy, Check } from 'lucide-react';
 
 export default function GeneratorPage() {
   const { isAuthenticated } = useAuth();
@@ -81,8 +82,9 @@ export default function GeneratorPage() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-10">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.02em' }}>
-            🎲 Password Generator
+          <h1 className="text-4xl font-semibold text-gray-900 mb-3 flex items-center gap-3" style={{ letterSpacing: '-0.02em' }}>
+            <Dices className="w-10 h-10" />
+            Password Generator
           </h1>
           <p className="text-base text-gray-600">
             Generate secure, cryptographically random passwords for your accounts
@@ -141,7 +143,7 @@ export default function GeneratorPage() {
                   onClick={copyPassphrase}
                   className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-all duration-150 text-sm"
                 >
-                  {copiedPassphrase ? '✓' : '📋'}
+                  {copiedPassphrase ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </button>
               )}
             </div>
@@ -191,7 +193,7 @@ export default function GeneratorPage() {
                   onClick={copyPin}
                   className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-all duration-150 text-sm"
                 >
-                  {copiedPin ? '✓' : '📋'}
+                  {copiedPin ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </button>
               )}
             </div>
@@ -201,7 +203,7 @@ export default function GeneratorPage() {
         {/* Security Info */}
         <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
           <div className="flex items-start gap-4">
-            <div className="text-4xl">🔒</div>
+            <Lock className="w-10 h-10 text-blue-600 flex-shrink-0" />
             <div>
               <h3 className="text-base font-semibold text-blue-900 mb-2" style={{ letterSpacing: '-0.01em' }}>
                 Cryptographically Secure
@@ -224,8 +226,9 @@ export default function GeneratorPage() {
         {/* Tips */}
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-white border border-gray-200 rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
-            <h3 className="text-base font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.01em' }}>
-              💡 Password Best Practices
+            <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2" style={{ letterSpacing: '-0.01em' }}>
+              <Lightbulb className="w-5 h-5" />
+              Password Best Practices
             </h3>
             <ul className="text-sm text-gray-700 space-y-1.5">
               <li>• Use 16+ characters for high security</li>
@@ -237,8 +240,9 @@ export default function GeneratorPage() {
           </div>
 
           <div className="bg-white border border-gray-200 rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
-            <h3 className="text-base font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.01em' }}>
-              🎯 When to Use Each Type
+            <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2" style={{ letterSpacing: '-0.01em' }}>
+              <Target className="w-5 h-5" />
+              When to Use Each Type
             </h3>
             <ul className="text-sm text-gray-700 space-y-1.5">
               <li>• <strong>Password:</strong> Most secure for accounts</li>

@@ -8,6 +8,7 @@ import {
   logTestResults,
 } from '@/lib/crypto/test-vectors';
 import { isWebCryptoAvailable } from '@/lib/crypto/utils';
+import { CheckCircle2, XCircle } from 'lucide-react';
 
 export default function CryptoTestPage() {
   const [testResults, setTestResults] = useState<any>(null);
@@ -67,7 +68,7 @@ export default function CryptoTestPage() {
           <div className="flex items-center">
             {isWebCryptoAvailable() ? (
               <>
-                <span className="text-green-500 text-2xl mr-3">✅</span>
+                <CheckCircle2 className="w-6 h-6 text-green-500 mr-3" />
                 <div>
                   <p className="font-semibold text-green-900 text-sm">Available</p>
                   <p className="text-xs text-green-700">
@@ -77,7 +78,7 @@ export default function CryptoTestPage() {
               </>
             ) : (
               <>
-                <span className="text-red-500 text-2xl mr-3">❌</span>
+                <XCircle className="w-6 h-6 text-red-500 mr-3" />
                 <div>
                   <p className="font-semibold text-red-900 text-sm">Not Available</p>
                   <p className="text-xs text-red-700">
@@ -129,8 +130,12 @@ export default function CryptoTestPage() {
                   }`}
                 >
                   <div className="flex items-start">
-                    <span className="text-2xl mr-3">
-                      {result.passed ? '✅' : '❌'}
+                    <span className="mr-3">
+                      {result.passed ? (
+                        <CheckCircle2 className="w-6 h-6 text-green-500" />
+                      ) : (
+                        <XCircle className="w-6 h-6 text-red-500" />
+                      )}
                     </span>
                     <div className="flex-1">
                       <p
@@ -152,12 +157,18 @@ export default function CryptoTestPage() {
             </div>
 
             <div className="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-200">
-              <p className="font-semibold text-gray-900 text-sm">
+              <p className="font-semibold text-gray-900 text-sm flex items-center gap-2">
                 Overall Status:{' '}
                 {testResults.success ? (
-                  <span className="text-green-600">✅ All Tests Passed</span>
+                  <span className="text-green-600 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" />
+                    All Tests Passed
+                  </span>
                 ) : (
-                  <span className="text-red-600">❌ Some Tests Failed</span>
+                  <span className="text-red-600 flex items-center gap-1.5">
+                    <XCircle className="w-4 h-4" />
+                    Some Tests Failed
+                  </span>
                 )}
               </p>
             </div>
