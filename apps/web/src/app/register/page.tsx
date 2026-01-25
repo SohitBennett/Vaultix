@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -12,38 +13,17 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const validatePassword = (pwd: string): string | null => {
-    if (pwd.length < 12) {
-      return 'Password must be at least 12 characters long';
-    }
-    if (!/[A-Z]/.test(pwd)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!/[a-z]/.test(pwd)) {
-      return 'Password must contain at least one lowercase letter';
-    }
-    if (!/[0-9]/.test(pwd)) {
-      return 'Password must contain at least one number';
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) {
-      return 'Password must contain at least one special character';
-    }
-    return null;
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Client-side validation
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      setError(passwordError);
+    if (password !== passwordConfirm) {
+      setError('Passwords do not match');
       return;
     }
 
-    if (password !== passwordConfirm) {
-      setError('Passwords do not match');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
       return;
     }
 
@@ -62,7 +42,7 @@ export default function RegisterPage() {
     <div className="claude-login-container">
       <div className="claude-content-wrapper">
         {/* Header */}
-        <div className="claude-header">
+        <div className="claude-header flex items-center justify-between">
           <Link href="/" className="claude-logo-link">
             <svg className="claude-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -70,6 +50,7 @@ export default function RegisterPage() {
             </svg>
             <span className="claude-logo-text">Vaultix</span>
           </Link>
+          <ThemeToggle />
         </div>
 
         {/* Form Card */}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
             <span className="claude-landing-logo-text">Vaultix</span>
           </Link>
           <div className="claude-landing-nav-buttons">
+            <ThemeToggle />
             <Link href="/login" className="claude-landing-btn-secondary">
               Sign in
             </Link>

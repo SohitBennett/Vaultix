@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -29,7 +30,7 @@ export default function LoginPage() {
     <div className="claude-login-container">
       <div className="claude-content-wrapper">
         {/* Header */}
-        <div className="claude-header">
+        <div className="claude-header flex items-center justify-between">
           <Link href="/" className="claude-logo-link">
             <svg className="claude-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -37,6 +38,7 @@ export default function LoginPage() {
             </svg>
             <span className="claude-logo-text">Vaultix</span>
           </Link>
+          <ThemeToggle />
         </div>
 
         {/* Form Card */}

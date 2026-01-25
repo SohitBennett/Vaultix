@@ -84,7 +84,8 @@
 
   /* Claude-inspired Login Styles */
   .claude-login-container {
-    @apply min-h-screen bg-white flex items-center justify-center px-4 py-12;
+    @apply min-h-screen bg-white dark:bg-[#0f0f0f] flex items-center justify-center px-4 py-12;
+    transition: background-color 0.2s ease;
   }
 
   .claude-content-wrapper {
@@ -101,17 +102,20 @@
   }
 
   .claude-logo-icon {
-    @apply w-7 h-7 text-gray-900;
+    @apply w-7 h-7 text-gray-900 dark:text-gray-100;
+    transition: color 0.2s ease;
   }
 
   .claude-logo-text {
-    @apply text-xl font-semibold text-gray-900;
+    @apply text-xl font-semibold text-gray-900 dark:text-gray-100;
     letter-spacing: -0.01em;
+    transition: color 0.2s ease;
   }
 
   .claude-card {
-    @apply bg-white border border-gray-200 rounded-2xl p-8;
+    @apply bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-2xl p-8;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
   .claude-card-header {
@@ -119,12 +123,14 @@
   }
 
   .claude-title {
-    @apply text-2xl font-semibold text-gray-900 mb-2;
+    @apply text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2;
     letter-spacing: -0.02em;
+    transition: color 0.2s ease;
   }
 
   .claude-subtitle {
-    @apply text-sm text-gray-600;
+    @apply text-sm text-gray-600 dark:text-gray-400;
+    transition: color 0.2s ease;
   }
 
   .claude-form {
@@ -132,7 +138,7 @@
   }
 
   .claude-error {
-    @apply flex items-start gap-2.5 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm;
+    @apply flex items-start gap-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-400 px-4 py-3 rounded-lg text-sm;
     animation: slideDown 0.3s ease-out;
   }
 
@@ -145,32 +151,33 @@
   }
 
   .claude-label {
-    @apply block text-sm font-medium text-gray-900;
+    @apply block text-sm font-medium text-gray-900 dark:text-gray-100;
+    transition: color 0.2s ease;
   }
 
   .claude-input {
-    @apply w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent;
+    @apply w-full px-3.5 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent;
     @apply transition-all duration-150;
     font-size: 15px;
   }
 
   .claude-input:hover {
-    @apply border-gray-400;
+    @apply border-gray-400 dark:border-gray-600;
   }
 
   .claude-submit-btn {
     @apply w-full flex items-center justify-center gap-2 px-4 py-2.5 mt-6;
-    @apply bg-gray-900 text-white font-medium rounded-lg;
-    @apply hover:bg-gray-800;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-medium rounded-lg;
+    @apply hover:bg-gray-800 dark:hover:bg-gray-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
     @apply transition-all duration-150;
     font-size: 15px;
   }
 
   .claude-spinner {
-    @apply w-4 h-4 border-2 border-white/30 border-t-white rounded-full;
+    @apply w-4 h-4 border-2 border-white/30 dark:border-gray-900/30 border-t-white dark:border-t-gray-900 rounded-full;
     animation: spin 0.6s linear infinite;
   }
 
@@ -179,25 +186,28 @@
   }
 
   .claude-divider span {
-    @apply px-3 text-xs text-gray-500 bg-white relative z-10;
+    @apply px-4 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1a1a1a] relative z-10;
     letter-spacing: 0.02em;
+    transition: color 0.2s ease, background-color 0.2s ease;
   }
 
   .claude-divider::before {
     content: '';
-    @apply absolute left-0 right-0 h-px bg-gray-200;
+    @apply absolute left-0 right-0 h-px bg-gray-200 dark:bg-gray-800;
+    transition: background-color 0.2s ease;
   }
 
   .claude-register-link {
-    @apply block w-full text-center px-4 py-2.5 bg-white text-gray-900 font-medium rounded-lg;
-    @apply border border-gray-300 hover:bg-gray-50 hover:border-gray-400;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply block w-full text-center px-4 py-2.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-medium rounded-lg;
+    @apply border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-600;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2;
     @apply transition-all duration-150;
     font-size: 15px;
   }
 
   .claude-footer {
-    @apply flex items-center justify-center gap-2 mt-8 text-xs text-gray-500;
+    @apply flex items-center justify-center gap-2 mt-8 text-xs text-gray-500 dark:text-gray-400;
+    transition: color 0.2s ease;
   }
 
   .claude-footer-icon {
@@ -214,11 +224,13 @@
 
   /* Landing Page Styles */
   .claude-landing-container {
-    @apply min-h-screen flex flex-col bg-white;
+    @apply min-h-screen flex flex-col bg-white dark:bg-[#0f0f0f];
+    transition: background-color 0.2s ease;
   }
 
   .claude-landing-header {
-    @apply border-b border-gray-200;
+    @apply border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1a1a1a];
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
   .claude-landing-nav {
@@ -230,12 +242,14 @@
   }
 
   .claude-landing-logo-icon {
-    @apply w-6 h-6 text-gray-900;
+    @apply w-6 h-6 text-gray-900 dark:text-gray-100;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-logo-text {
-    @apply text-lg font-semibold text-gray-900;
+    @apply text-lg font-semibold text-gray-900 dark:text-gray-100;
     letter-spacing: -0.01em;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-nav-buttons {
@@ -243,16 +257,16 @@
   }
 
   .claude-landing-btn-secondary {
-    @apply px-4 py-2 text-sm font-medium text-gray-900 rounded-lg;
-    @apply border border-gray-300 hover:bg-gray-50 hover:border-gray-400;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 rounded-lg;
+    @apply border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2;
     @apply transition-all duration-150;
   }
 
   .claude-landing-btn-primary {
-    @apply px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg;
-    @apply hover:bg-gray-800;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply px-4 py-2 text-sm font-medium text-white dark:text-gray-900 bg-gray-900 dark:bg-gray-100 rounded-lg;
+    @apply hover:bg-gray-800 dark:hover:bg-gray-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2;
     @apply transition-all duration-150;
   }
 
@@ -265,18 +279,21 @@
   }
 
   .claude-landing-hero-title {
-    @apply text-5xl sm:text-6xl font-semibold text-gray-900 mb-6;
+    @apply text-5xl sm:text-6xl font-semibold text-gray-900 dark:text-gray-100 mb-6;
     letter-spacing: -0.03em;
     line-height: 1.1;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-hero-title-accent {
-    @apply text-gray-600;
+    @apply text-gray-600 dark:text-gray-400;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-hero-subtitle {
-    @apply text-lg text-gray-600 mb-10 max-w-2xl mx-auto;
+    @apply text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto;
     line-height: 1.6;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-hero-buttons {
@@ -284,16 +301,16 @@
   }
 
   .claude-landing-hero-btn-primary {
-    @apply px-6 py-3 text-base font-medium text-white bg-gray-900 rounded-lg;
-    @apply hover:bg-gray-800;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply px-6 py-3 text-base font-medium text-white dark:text-gray-900 bg-gray-900 dark:bg-gray-100 rounded-lg;
+    @apply hover:bg-gray-800 dark:hover:bg-gray-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2;
     @apply transition-all duration-150;
   }
 
   .claude-landing-hero-btn-secondary {
-    @apply px-6 py-3 text-base font-medium text-gray-900 rounded-lg;
-    @apply border border-gray-300 hover:bg-gray-50 hover:border-gray-400;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+    @apply px-6 py-3 text-base font-medium text-gray-900 dark:text-gray-100 rounded-lg;
+    @apply border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2;
     @apply transition-all duration-150;
   }
 
@@ -302,12 +319,13 @@
   }
 
   .claude-landing-feature-card {
-    @apply bg-white border border-gray-200 rounded-xl p-6;
-    @apply transition-all duration-200 hover:border-gray-300 hover:shadow-sm;
+    @apply bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl p-6;
+    @apply transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm;
   }
 
   .claude-landing-feature-icon {
-    @apply w-10 h-10 text-gray-900 mb-4;
+    @apply w-10 h-10 text-gray-900 dark:text-gray-100 mb-4;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-feature-icon svg {
@@ -315,21 +333,24 @@
   }
 
   .claude-landing-feature-title {
-    @apply text-lg font-semibold text-gray-900 mb-2;
+    @apply text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2;
     letter-spacing: -0.01em;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-feature-description {
-    @apply text-sm text-gray-600 leading-relaxed;
+    @apply text-sm text-gray-600 dark:text-gray-400 leading-relaxed;
+    transition: color 0.2s ease;
   }
 
   .claude-landing-feature-link {
-    @apply inline-block mt-3 text-sm font-medium text-gray-900;
-    @apply hover:text-gray-700 transition-colors duration-150;
+    @apply inline-block mt-3 text-sm font-medium text-gray-900 dark:text-gray-100;
+    @apply hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-150;
   }
 
   .claude-landing-footer {
-    @apply border-t border-gray-200 py-8 mt-20;
+    @apply border-t border-gray-200 dark:border-gray-800 py-8 mt-20;
+    transition: border-color 0.2s ease;
   }
 
   .claude-landing-footer-content {
@@ -337,7 +358,8 @@
   }
 
   .claude-landing-footer-content p {
-    @apply text-xs text-gray-500;
+    @apply text-xs text-gray-500 dark:text-gray-400;
+    transition: color 0.2s ease;
   }
 }
 
