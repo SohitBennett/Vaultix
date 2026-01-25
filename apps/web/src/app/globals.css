@@ -271,7 +271,7 @@
   }
 
   .claude-landing-hero {
-    @apply flex-1 flex items-center justify-center py-20 px-4;
+    @apply flex-1 flex items-center justify-center py-12 px-4;
   }
 
   .claude-landing-hero-content {
@@ -279,7 +279,7 @@
   }
 
   .claude-landing-hero-title {
-    @apply text-5xl sm:text-6xl font-semibold text-gray-900 dark:text-gray-100 mb-6;
+    @apply text-4xl sm:text-5xl font-semibold text-gray-900 dark:text-gray-100 mb-4;
     letter-spacing: -0.03em;
     line-height: 1.1;
     transition: color 0.2s ease;
@@ -291,13 +291,13 @@
   }
 
   .claude-landing-hero-subtitle {
-    @apply text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto;
+    @apply text-base text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto;
     line-height: 1.6;
     transition: color 0.2s ease;
   }
 
   .claude-landing-hero-buttons {
-    @apply flex gap-4 justify-center mb-20;
+    @apply flex gap-4 justify-center mb-12;
   }
 
   .claude-landing-hero-btn-primary {
@@ -315,16 +315,16 @@
   }
 
   .claude-landing-features {
-    @apply grid md:grid-cols-3 gap-6 max-w-5xl mx-auto;
+    @apply grid md:grid-cols-3 gap-4 max-w-5xl mx-auto;
   }
 
   .claude-landing-feature-card {
-    @apply bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl p-6;
+    @apply bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl p-5;
     @apply transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm;
   }
 
   .claude-landing-feature-icon {
-    @apply w-10 h-10 text-gray-900 dark:text-gray-100 mb-4;
+    @apply w-8 h-8 text-gray-900 dark:text-gray-100 mb-3;
     transition: color 0.2s ease;
   }
 
@@ -333,7 +333,7 @@
   }
 
   .claude-landing-feature-title {
-    @apply text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2;
+    @apply text-base font-semibold text-gray-900 dark:text-gray-100 mb-1.5;
     letter-spacing: -0.01em;
     transition: color 0.2s ease;
   }
@@ -344,12 +344,12 @@
   }
 
   .claude-landing-feature-link {
-    @apply inline-block mt-3 text-sm font-medium text-gray-900 dark:text-gray-100;
+    @apply inline-block mt-2 text-sm font-medium text-gray-900 dark:text-gray-100;
     @apply hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-150;
   }
 
   .claude-landing-footer {
-    @apply border-t border-gray-200 dark:border-gray-800 py-8 mt-20;
+    @apply border-t border-gray-200 dark:border-gray-800 py-6 mt-8;
     transition: border-color 0.2s ease;
   }
 

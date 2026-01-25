@@ -28,17 +28,23 @@ export default function LoginPage() {
 
   return (
     <div className="claude-login-container">
+      {/* Theme Toggle - Fixed top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       <div className="claude-content-wrapper">
-        {/* Header */}
-        <div className="claude-header flex items-center justify-between">
-          <Link href="/" className="claude-logo-link">
-            <svg className="claude-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        {/* Header with Logo */}
+        <div className="claude-header text-center">
+          <Link href="/" className="inline-flex flex-col items-center gap-3 mb-8 transition-opacity duration-200 hover:opacity-70">
+            <svg className="w-12 h-12 text-gray-900 dark:text-gray-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <span className="claude-logo-text">Vaultix</span>
+            <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100" style={{ letterSpacing: '-0.01em' }}>
+              Vaultix
+            </span>
           </Link>
-          <ThemeToggle />
         </div>
 
         {/* Form Card */}
