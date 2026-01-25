@@ -116,24 +116,27 @@ function VaultContent() {
   const categories = Array.from(new Set(items.map((item) => item.category).filter(Boolean)));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="border-b border-gray-200">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">🔐</span>
-            <span className="ml-2 text-xl font-bold text-gray-900">
-              Password Manager
+          <div className="flex items-center gap-2.5">
+            <svg className="w-6 h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="text-lg font-semibold text-gray-900" style={{ letterSpacing: '-0.01em' }}>
+              Vaultix
             </span>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{user?.email}</span>
             {isVaultUnlocked && (
-              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+              <span className="text-xs bg-green-50 text-green-700 px-2.5 py-1 rounded-md border border-green-200 font-medium">
                 🔓 Unlocked
               </span>
             )}
-            <button onClick={handleLogout} className="btn-secondary">
+            <button onClick={handleLogout} className="claude-landing-btn-secondary">
               Logout
             </button>
           </div>
@@ -141,23 +144,30 @@ function VaultContent() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Unlock Vault Form */}
         {!isVaultUnlocked ? (
-          <div className="max-w-md mx-auto">
-            <div className="card">
-              <h2 className="text-xl font-semibold mb-4">Unlock Vault</h2>
-              <p className="text-gray-600 mb-4">
-                Enter your master password to unlock your vault and access encrypted data.
+          <div className="max-w-md mx-auto" style={{ animation: 'fadeIn 0.4s ease-out' }}>
+            <div className="mb-8">
+              <h1 className="text-2xl font-semibold text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
+                Unlock Your Vault
+              </h1>
+              <p className="text-sm text-gray-600">
+                Enter your master password to access your encrypted passwords
               </p>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-2xl p-8" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
               <form onSubmit={handleUnlock} className="space-y-4">
                 {unlockError && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                    {unlockError}
+                  <div className="claude-error">
+                    <svg className="claude-error-icon" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    <span>{unlockError}</span>
                   </div>
                 )}
-                <div>
-                  <label htmlFor="unlock-password" className="label">
+                <div className="claude-input-group">
+                  <label htmlFor="unlock-password" className="claude-label">
                     Master Password
                   </label>
                   <input
@@ -165,38 +175,55 @@ function VaultContent() {
                     type="password"
                     value={unlockPassword}
                     onChange={(e) => setUnlockPassword(e.target.value)}
-                    className="input"
-                    placeholder="Enter your password"
+                    className="claude-input"
+                    placeholder="Enter your master password"
                     required
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isUnlocking}
-                  className="w-full btn-primary disabled:opacity-50"
+                  className="claude-submit-btn"
                 >
-                  {isUnlocking ? 'Unlocking...' : 'Unlock Vault'}
+                  {isUnlocking ? (
+                    <>
+                      <div className="claude-spinner"></div>
+                      <span>Unlocking...</span>
+                    </>
+                  ) : (
+                    'Unlock Vault'
+                  )}
                 </button>
               </form>
+            </div>
+            <div className="flex items-center justify-center gap-2 mt-8 text-xs text-gray-500">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <p className="text-center">
+                Your vault is encrypted with AES-256-GCM encryption
+              </p>
             </div>
           </div>
         ) : (
           <>
             {/* Header Actions */}
             <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">Your Vault</h1>
-                  <p className="mt-2 text-gray-600">
-                    {totalItems} {totalItems === 1 ? 'password' : 'passwords'} stored
-                    securely
+                  <h1 className="text-3xl font-semibold text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
+                    Your Vault
+                  </h1>
+                  <p className="text-sm text-gray-600">
+                    {totalItems} {totalItems === 1 ? 'password' : 'passwords'} stored securely
                   </p>
                 </div>
                 <div className="flex gap-3">
                   <button
                     onClick={() => setIsExportModalOpen(true)}
                     disabled={items.length === 0}
-                    className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="claude-landing-btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     📥 Export CSV
                   </button>
@@ -205,7 +232,7 @@ function VaultContent() {
                       setEditingItem(null);
                       setIsAddModalOpen(true);
                     }}
-                    className="btn-primary"
+                    className="claude-landing-btn-primary"
                   >
                     + Add Password
                   </button>
@@ -213,18 +240,18 @@ function VaultContent() {
               </div>
 
               {/* Filters */}
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 <input
                   type="text"
                   placeholder="Search passwords..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input flex-1 min-w-[200px]"
+                  className="claude-input flex-1 min-w-[200px]"
                 />
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="input"
+                  className="claude-input w-auto"
                 >
                   <option value="">All Categories</option>
                   {categories.map((cat) => (
@@ -235,10 +262,10 @@ function VaultContent() {
                 </select>
                 <button
                   onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                  className={`px-4 py-2 rounded-lg font-medium ${
+                  className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-150 text-sm ${
                     showFavoritesOnly
-                      ? 'bg-yellow-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      ? 'bg-gray-900 text-white hover:bg-gray-800'
+                      : 'bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 hover:border-gray-400'
                   }`}
                 >
                   ⭐ Favorites
@@ -248,9 +275,12 @@ function VaultContent() {
 
             {/* Error Message */}
             {error && (
-              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between">
-                <span>{error}</span>
-                <button onClick={clearError} className="text-red-900 font-bold">
+              <div className="mb-6 claude-error">
+                <svg className="claude-error-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span className="flex-1">{error}</span>
+                <button onClick={clearError} className="text-red-900 font-bold hover:text-red-700">
                   ×
                 </button>
               </div>
@@ -258,20 +288,20 @@ function VaultContent() {
 
             {/* Loading */}
             {isLoading && (
-              <div className="text-center py-12">
-                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-                <p className="mt-4 text-gray-600">Loading passwords...</p>
+              <div className="text-center py-16">
+                <div className="inline-block h-8 w-8 border-2 border-gray-900/30 border-t-gray-900 rounded-full" style={{ animation: 'spin 0.6s linear infinite' }}></div>
+                <p className="mt-4 text-sm text-gray-600">Loading passwords...</p>
               </div>
             )}
 
             {/* Empty State */}
             {!isLoading && items.length === 0 && (
-              <div className="text-center py-12">
+              <div className="text-center py-16">
                 <div className="text-6xl mb-4">🔐</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
                   No Passwords Yet
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-sm text-gray-600 mb-6">
                   Start by adding your first password to the vault
                 </p>
                 <button
@@ -279,7 +309,7 @@ function VaultContent() {
                     setEditingItem(null);
                     setIsAddModalOpen(true);
                   }}
-                  className="btn-primary"
+                  className="claude-landing-btn-primary"
                 >
                   + Add Your First Password
                 </button>
@@ -289,7 +319,7 @@ function VaultContent() {
             {/* Vault Items Grid */}
             {!isLoading && items.length > 0 && (
               <>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {items.map((item) => (
                     <VaultItemCard
                       key={item.id}
@@ -310,21 +340,21 @@ function VaultContent() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="mt-8 flex items-center justify-center gap-2">
+                  <div className="mt-8 flex items-center justify-center gap-3">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 hover:border-gray-400 transition-all duration-150 text-sm font-medium text-gray-900"
                     >
                       Previous
                     </button>
-                    <span className="px-4 py-2 text-gray-700">
+                    <span className="px-4 py-2 text-sm text-gray-700">
                       Page {currentPage} of {totalPages}
                     </span>
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 hover:border-gray-400 transition-all duration-150 text-sm font-medium text-gray-900"
                     >
                       Next
                     </button>

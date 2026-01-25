@@ -46,27 +46,30 @@ export default function GeneratorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="border-b border-gray-200">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">🔐</span>
-            <span className="ml-2 text-xl font-bold text-gray-900">
-              Password Manager
+          <Link href="/" className="flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-70">
+            <svg className="w-6 h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="text-lg font-semibold text-gray-900" style={{ letterSpacing: '-0.01em' }}>
+              Vaultix
             </span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {isAuthenticated ? (
-              <Link href="/vault" className="btn-primary">
+              <Link href="/vault" className="claude-landing-btn-primary">
                 Go to Vault
               </Link>
             ) : (
               <>
-                <Link href="/login" className="btn-secondary">
+                <Link href="/login" className="claude-landing-btn-secondary">
                   Login
                 </Link>
-                <Link href="/register" className="btn-primary">
+                <Link href="/register" className="claude-landing-btn-primary">
                   Sign Up
                 </Link>
               </>
@@ -77,29 +80,29 @@ export default function GeneratorPage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+        <div className="mb-10">
+          <h1 className="text-4xl font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.02em' }}>
             🎲 Password Generator
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-base text-gray-600">
             Generate secure, cryptographically random passwords for your accounts
           </p>
         </div>
 
         {/* Standard Password Generator */}
-        <div className="card mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 mb-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6" style={{ letterSpacing: '-0.01em' }}>
             Password Generator
           </h2>
           <PasswordGenerator showCopyButton={true} />
         </div>
 
         {/* Passphrase Generator */}
-        <div className="card mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 mb-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.01em' }}>
             Passphrase Generator
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 mb-6">
             Generate memorable passphrases using random words. Example:{' '}
             <span className="font-mono text-sm">correct-horse-battery-staple</span>
           </p>
@@ -107,7 +110,7 @@ export default function GeneratorPage() {
           <div className="space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="label">Number of Words: {passphraseCount}</label>
+                <label className="claude-label">Number of Words: {passphraseCount}</label>
               </div>
               <input
                 type="range"
@@ -115,7 +118,7 @@ export default function GeneratorPage() {
                 max="8"
                 value={passphraseCount}
                 onChange={(e) => setPassphraseCount(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full accent-gray-900"
               />
             </div>
 
@@ -125,18 +128,18 @@ export default function GeneratorPage() {
                 value={passphrase}
                 readOnly
                 placeholder="Click generate to create a passphrase"
-                className="input flex-1 font-mono"
+                className="claude-input flex-1 font-mono"
               />
               <button
                 onClick={handleGeneratePassphrase}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                className="px-4 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-medium transition-all duration-150 text-sm"
               >
                 Generate
               </button>
               {passphrase && (
                 <button
                   onClick={copyPassphrase}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                  className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-all duration-150 text-sm"
                 >
                   {copiedPassphrase ? '✓' : '📋'}
                 </button>
@@ -146,18 +149,18 @@ export default function GeneratorPage() {
         </div>
 
         {/* PIN Generator */}
-        <div className="card mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 mb-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.01em' }}>
             PIN Generator
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 mb-6">
             Generate secure numeric PINs for phone locks, ATM cards, etc.
           </p>
 
           <div className="space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="label">PIN Length: {pinLength}</label>
+                <label className="claude-label">PIN Length: {pinLength}</label>
               </div>
               <input
                 type="range"
@@ -165,7 +168,7 @@ export default function GeneratorPage() {
                 max="8"
                 value={pinLength}
                 onChange={(e) => setPinLength(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full accent-gray-900"
               />
             </div>
 
@@ -175,18 +178,18 @@ export default function GeneratorPage() {
                 value={pin}
                 readOnly
                 placeholder="Click generate to create a PIN"
-                className="input flex-1 font-mono text-2xl tracking-widest"
+                className="claude-input flex-1 font-mono text-2xl tracking-widest"
               />
               <button
                 onClick={handleGeneratePIN}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                className="px-4 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-medium transition-all duration-150 text-sm"
               >
                 Generate
               </button>
               {pin && (
                 <button
                   onClick={copyPin}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                  className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-all duration-150 text-sm"
                 >
                   {copiedPin ? '✓' : '📋'}
                 </button>
@@ -196,21 +199,21 @@ export default function GeneratorPage() {
         </div>
 
         {/* Security Info */}
-        <div className="card bg-blue-50 border-blue-200">
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
           <div className="flex items-start gap-4">
             <div className="text-4xl">🔒</div>
             <div>
-              <h3 className="text-lg font-semibold text-blue-900 mb-2">
+              <h3 className="text-base font-semibold text-blue-900 mb-2" style={{ letterSpacing: '-0.01em' }}>
                 Cryptographically Secure
               </h3>
-              <p className="text-blue-800 text-sm mb-2">
+              <p className="text-sm text-blue-800 mb-2">
                 All passwords are generated using{' '}
-                <code className="bg-blue-100 px-1 rounded">
+                <code className="bg-blue-100 px-1.5 py-0.5 rounded text-xs">
                   crypto.getRandomValues()
                 </code>
                 , which provides cryptographically strong random values.
               </p>
-              <p className="text-blue-800 text-sm">
+              <p className="text-sm text-blue-800">
                 <strong>Never use Math.random() for passwords!</strong> It's not
                 secure and can be predicted.
               </p>
@@ -219,12 +222,12 @@ export default function GeneratorPage() {
         </div>
 
         {/* Tips */}
-        <div className="mt-8 grid md:grid-cols-2 gap-6">
-          <div className="card">
-            <h3 className="font-semibold text-gray-900 mb-2">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
+            <h3 className="text-base font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.01em' }}>
               💡 Password Best Practices
             </h3>
-            <ul className="text-sm text-gray-700 space-y-1">
+            <ul className="text-sm text-gray-700 space-y-1.5">
               <li>• Use 16+ characters for high security</li>
               <li>• Include all character types</li>
               <li>• Never reuse passwords across sites</li>
@@ -233,11 +236,11 @@ export default function GeneratorPage() {
             </ul>
           </div>
 
-          <div className="card">
-            <h3 className="font-semibold text-gray-900 mb-2">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
+            <h3 className="text-base font-semibold text-gray-900 mb-3" style={{ letterSpacing: '-0.01em' }}>
               🎯 When to Use Each Type
             </h3>
-            <ul className="text-sm text-gray-700 space-y-1">
+            <ul className="text-sm text-gray-700 space-y-1.5">
               <li>• <strong>Password:</strong> Most secure for accounts</li>
               <li>• <strong>Passphrase:</strong> Easy to remember</li>
               <li>• <strong>PIN:</strong> For numeric-only systems</li>
