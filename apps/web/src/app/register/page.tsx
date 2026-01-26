@@ -40,14 +40,14 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0f0f0f] flex transition-colors duration-200">
+    <div className="min-h-screen relative flex transition-colors duration-200">
       {/* Theme Toggle - Fixed top right */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {/* Left Side - Hero Image as Background */}
-      <div className="hidden lg:block lg:w-1/2 relative">
+      {/* Full Screen Background Image - Desktop Only */}
+      <div className="hidden lg:block fixed inset-0 z-0">
         <Image
           src="/images/register-hero.png"
           alt="Vaultix - Create Your Secure Vault"
@@ -55,13 +55,18 @@ export default function RegisterPage() {
           className="object-cover"
           style={{ objectPosition: '12% center' }}
           priority
-          sizes="50vw"
+          sizes="100vw"
         />
+        {/* Subtle overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/5 dark:bg-black/20" />
       </div>
 
-      {/* Right Side - Register Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-        <div className="w-full max-w-md">
+      {/* Mobile Background */}
+      <div className="lg:hidden fixed inset-0 z-0 bg-white dark:bg-[#0f0f0f]" />
+
+      {/* Content Container */}
+      <div className="relative z-10 w-full flex items-center justify-end px-4 sm:px-6 lg:px-8 py-12">
+        <div className="w-full lg:w-auto lg:min-w-[480px] lg:max-w-md lg:mr-12">
           {/* Logo - Mobile Only */}
           <div className="lg:hidden text-center mb-6">
             <Link href="/" className="inline-flex flex-col items-center gap-3 transition-opacity duration-200 hover:opacity-70">
@@ -90,8 +95,8 @@ export default function RegisterPage() {
             </Link>
           </div>
 
-          {/* Form Card */}
-          <div className="bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-2xl p-8 transition-colors duration-200" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' }}>
+          {/* Form Card - with backdrop blur for glass effect */}
+          <div className="bg-white/95 dark:bg-[#1a1a1a]/95 backdrop-blur-sm border border-gray-200 dark:border-gray-800 rounded-2xl p-8 transition-colors duration-200 shadow-xl">
             <div className="mb-6">
               <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2" style={{ letterSpacing: '-0.02em' }}>
                 Create your account
@@ -188,7 +193,7 @@ export default function RegisterPage() {
             {/* Divider */}
             <div className="relative flex items-center justify-center my-6">
               <div className="absolute left-0 right-0 h-px bg-gray-200 dark:bg-gray-800" />
-              <span className="px-4 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1a1a1a] relative z-10" style={{ letterSpacing: '0.02em' }}>
+              <span className="px-4 text-xs text-gray-500 dark:text-gray-400 bg-white/95 dark:bg-[#1a1a1a]/95 relative z-10" style={{ letterSpacing: '0.02em' }}>
                 Already have an account?
               </span>
             </div>
@@ -209,7 +214,7 @@ export default function RegisterPage() {
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <p className="text-center">
+            <p className="text-center lg:text-shadow-sm">
               Zero-knowledge encryption. Your master password never leaves your device.
             </p>
           </div>
