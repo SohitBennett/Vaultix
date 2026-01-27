@@ -11,7 +11,7 @@ import { ExportConfirmModal } from '@/components/vault/ExportConfirmModal';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import Link from 'next/link';
 import type { VaultItemDecrypted, CreateVaultItemRequest } from '@/lib/crypto/types';
-import { LockOpen, Download, Star, Lock, Plus } from 'lucide-react';
+import { LockOpen, Download, Star, Lock, Plus, Dices } from 'lucide-react';
 
 function VaultContent() {
   const { user, logout, isVaultUnlocked, unlockVault } = useAuth();
@@ -151,6 +151,13 @@ function VaultContent() {
                 Unlocked
               </span>
             )}
+            <Link 
+              href="/generator" 
+              className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2 transition-all duration-150 flex items-center gap-2"
+            >
+              <Dices className="w-4 h-4" />
+              Generator
+            </Link>
             <ThemeToggle />
             <button onClick={handleLogout} className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:ring-offset-2 transition-all duration-150">
               Logout
