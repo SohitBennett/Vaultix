@@ -12,6 +12,7 @@ import {
   UnauthorizedError,
   ValidationError,
 } from '../utils/errors';
+import { logger } from '../utils/logger';
 
 export class AuthService {
   // Register new user
@@ -19,22 +20,28 @@ export class AuthService {
   static async register(data: RegisterRequest): Promise<AuthResponse & { refreshToken: string }> {
     const { email, password, passwordConfirm } = data;
 
+    logger.info('Registration attempt', { email });
+
     // Validate passwords match
     if (password !== passwordConfirm) {
+      logger.warn('Registration failed: passwords do not match', { email });
       throw new ValidationError('Passwords do not match');
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      logger.warn('Registration failed: email already exists', { email });
       throw new ConflictError('Email already registered');
     }
 
     // Generate salt for PBKDF2 (this will be used client-side)
     const salt = randomBytes(32).toString('base64');
+    logger.debug('Generated salt for user', { email, saltLength: salt.length });
 
     // Hash password with bcrypt (server-side protection)
     const passwordHash = await bcrypt.hash(password, 12);
+    logger.debug('Password hashed with bcrypt', { email });
 
     // Create user
     const user = await User.create({
@@ -42,6 +49,7 @@ export class AuthService {
       passwordHash,
       salt,
     });
+    logger.success('User registered successfully', { userId: user._id.toString(), email });
 
     // Generate tokens
     const accessToken = TokenService.generateAccessToken(
@@ -51,6 +59,8 @@ export class AuthService {
     const refreshToken = await TokenService.generateRefreshToken(
       user._id.toString()
     );
+
+    logger.debug('Tokens generated for new user', { userId: user._id.toString() });
 
     return {
       user: {
@@ -71,17 +81,25 @@ export class AuthService {
   static async login(data: LoginRequest): Promise<AuthResponse & { refreshToken: string }> {
     const { email, password } = data;
 
+    logger.info('Login attempt', { email });
+
     // Find user
     const user = await User.findOne({ email }).select('+passwordHash +salt');
     if (!user) {
+      logger.warn('Login failed: user not found', { email });
       throw new UnauthorizedError('Invalid email or password');
     }
+
+    logger.debug('User found, verifying password', { userId: user._id.toString(), email });
 
     // Verify password
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
+      logger.warn('Login failed: invalid password', { userId: user._id.toString(), email });
       throw new UnauthorizedError('Invalid email or password');
     }
+
+    logger.success('Password verified successfully', { userId: user._id.toString(), email });
 
     // Generate tokens
     const accessToken = TokenService.generateAccessToken(
@@ -91,6 +109,8 @@ export class AuthService {
     const refreshToken = await TokenService.generateRefreshToken(
       user._id.toString()
     );
+
+    logger.debug('Tokens generated for login', { userId: user._id.toString() });
 
     return {
       user: {

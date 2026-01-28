@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { RegisterRequest, LoginRequest } from '@password-manager/shared';
 import { UnauthorizedError } from '../utils/errors';
 import { isProd } from '../config/environment';
+import { logger } from '../utils/logger';
 
 export class AuthController {
   // Register new user
@@ -12,6 +13,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      logger.request('POST', '/api/v1/auth/register');
       const data: RegisterRequest = req.body;
       const result = await AuthService.register(data);
 
@@ -43,6 +45,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      logger.request('POST', '/api/v1/auth/login');
       const data: LoginRequest = req.body;
       const result = await AuthService.login(data);
 
@@ -74,6 +77,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      logger.request('POST', '/api/v1/auth/refresh');
       const refreshToken = req.cookies.refreshToken;
 
       if (!refreshToken) {
@@ -112,6 +116,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      logger.request('POST', '/api/v1/auth/logout', req.user?.userId);
       const refreshToken = req.cookies.refreshToken;
 
       if (refreshToken) {
@@ -144,6 +149,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      logger.request('GET', '/api/v1/auth/me', req.user?.userId);
       if (!req.user) {
         throw new UnauthorizedError();
       }

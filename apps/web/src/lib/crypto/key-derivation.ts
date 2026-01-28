@@ -24,11 +24,23 @@ export async function deriveMasterKey(
   salt: string,
   iterations: number = PBKDF2_ITERATIONS
 ): Promise<CryptoKey> {
+  console.log('[Key Derivation] Starting key derivation', {
+    passwordLength: password.length,
+    saltLength: salt.length,
+    iterations,
+    algorithm: PBKDF2_HASH_ALGORITHM,
+    keyLength: PBKDF2_KEY_LENGTH,
+  });
+
   ensureWebCrypto();
 
   try {
     // Convert password to key material
+    console.log('[Key Derivation] Step 1: Converting password to buffer');
     const passwordBuffer = stringToBuffer(password);
+    console.log('[Key Derivation] Password buffer size:', passwordBuffer.byteLength, 'bytes');
+
+    console.log('[Key Derivation] Step 2: Importing key material');
     const keyMaterial = await window.crypto.subtle.importKey(
       'raw',
       passwordBuffer,
@@ -36,11 +48,17 @@ export async function deriveMasterKey(
       false,
       ['deriveBits', 'deriveKey']
     );
+    console.log('[Key Derivation] ✅ Key material imported successfully');
 
     // Convert salt from base64
+    console.log('[Key Derivation] Step 3: Converting salt from base64');
     const saltBuffer = base64ToBuffer(salt);
+    console.log('[Key Derivation] Salt buffer size:', saltBuffer.byteLength, 'bytes');
 
     // Derive key using PBKDF2
+    console.log('[Key Derivation] Step 4: Deriving master key with PBKDF2');
+    const startTime = performance.now();
+    
     const masterKey = await window.crypto.subtle.deriveKey(
       {
         name: 'PBKDF2',
@@ -54,9 +72,16 @@ export async function deriveMasterKey(
       ['encrypt', 'decrypt']
     );
 
+    const endTime = performance.now();
+    console.log('[Key Derivation] ✅ Master key derived successfully in', (endTime - startTime).toFixed(2), 'ms');
+    console.log('[Key Derivation] Key type:', masterKey.type, 'Algorithm:', masterKey.algorithm);
+
     return masterKey;
   } catch (error) {
-    console.error('Key derivation error:', error);
+    console.error('[Key Derivation] ❌ Key derivation failed');
+    console.error('[Key Derivation] Error type:', error?.constructor?.name);
+    console.error('[Key Derivation] Error message:', error instanceof Error ? error.message : String(error));
+    console.error('[Key Derivation] Full error:', error);
     throw new Error(CRYPTO_ERRORS.KEY_DERIVATION_FAILED);
   }
 }

@@ -90,25 +90,81 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const unlockVault = async (password: string) => {
     if (!user) {
+      console.error('[Vault Unlock] ❌ No user authenticated');
       throw new Error('User not authenticated');
     }
 
+    console.log('[Vault Unlock] ========== UNLOCK ATTEMPT START ==========');
+    console.log('[Vault Unlock] User Info:', {
+      userId: user.id,
+      userEmail: user.email,
+      hasSalt: !!user.salt,
+      saltLength: user.salt?.length,
+      saltPreview: user.salt?.substring(0, 20) + '...',
+    });
+    console.log('[Vault Unlock] Password Info:', {
+      passwordLength: password.length,
+      passwordPreview: password.substring(0, 3) + '***',
+      isEmpty: password.length === 0,
+    });
+
     try {
+      // Validate inputs
+      if (!user.salt) {
+        console.error('[Vault Unlock] ❌ No salt found for user');
+        throw new Error('User salt not found. Please contact support.');
+      }
+
+      if (!password || password.trim().length === 0) {
+        console.error('[Vault Unlock] ❌ Empty password provided');
+        throw new Error('Password cannot be empty');
+      }
+
       // Initialize key manager with password and salt
+      console.log('[Vault Unlock] Calling keyManager.initialize()...');
+      const startTime = performance.now();
+      
       await keyManager.initialize(password, user.salt);
+      
+      const endTime = performance.now();
+      console.log('[Vault Unlock] ✅ Key derivation completed in', (endTime - startTime).toFixed(2), 'ms');
+      console.log('[Vault Unlock] ✅ Vault unlocked successfully');
+      console.log('[Vault Unlock] ========== UNLOCK ATTEMPT SUCCESS ==========');
+      
       setIsVaultUnlocked(true);
     } catch (error) {
+      console.error('[Vault Unlock] ========== UNLOCK ATTEMPT FAILED ==========');
+      console.error('[Vault Unlock] ❌ Error details:', {
+        errorType: error?.constructor?.name,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+      });
+      
+      // Re-throw with user-friendly message
+      if (error instanceof Error && error.message.includes('salt')) {
+        throw new Error('User configuration error. Please contact support.');
+      }
+      
       throw new Error('Failed to unlock vault. Please check your password.');
     }
   };
 
   const login = async (data: LoginRequest) => {
+    console.log('[Auth] Login attempt', { email: data.email });
     const response = await apiClient.login(data);
+    console.log('[Auth] Login successful', { 
+      userId: response.user.id, 
+      email: response.user.email,
+      hasSalt: !!response.user.salt 
+    });
+    
     apiClient.setAccessToken(response.tokens.accessToken);
     setUser(response.user);
     
     // Initialize key manager with the password (available during login)
+    console.log('[Auth] Initializing vault with login password');
     await keyManager.initialize(data.password, response.user.salt);
+    console.log('[Auth] ✅ Vault initialized and unlocked');
     setIsVaultUnlocked(true);
     
     router.push('/vault');

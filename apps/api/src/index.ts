@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -8,6 +8,7 @@ import { generalLimiter } from './middleware/rate-limit.middleware';
 import { errorHandler } from './middleware/error-handler.middleware';
 import authRoutes from './routes/auth.routes';
 import vaultRoutes from './routes/vault.routes';
+import { logger } from './utils/logger';
 
 const app: Application = express();
 
@@ -34,8 +35,20 @@ app.use(cookieParser());
 // Rate limiting
 app.use(generalLimiter);
 
+// Request logging middleware
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const statusColor = res.statusCode >= 400 ? '\x1b[31m' : '\x1b[32m';
+    const reset = '\x1b[0m';
+    logger.info(`${req.method} ${req.path} ${statusColor}${res.statusCode}${reset} - ${duration}ms`);
+  });
+  next();
+});
+
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -72,33 +85,27 @@ const startServer = async (): Promise<void> => {
 
     // Start listening
     app.listen(config.port, () => {
-      console.log(`
-╔══════════════════════════════════════════════╗
-║                                              ║
-║   Password Manager API                       ║
-║                                              ║
-║   Status: Running                            ║
-║   Port: ${config.port}                       ║
-║   Environment: ${config.nodeEnv}             ║
-║   CORS Origin: ${config.corsOrigin}          ║
-║                                              ║
-╚══════════════════════════════════════════════╝
-      `);
+      logger.success('Password Manager API Started');
+      logger.info(`Port: ${config.port}`);
+      logger.info(`Environment: ${config.nodeEnv}`);
+      logger.info(`CORS Origin: ${config.corsOrigin}`);
+      logger.info(`MongoDB: Connected`);
+      console.log(''); // Empty line for readability
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    logger.error('Failed to start server', error);
     process.exit(1);
   }
 };
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
+  logger.warn('SIGTERM received, shutting down gracefully');
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
+  logger.warn('SIGINT received, shutting down gracefully');
   process.exit(0);
 });
 
