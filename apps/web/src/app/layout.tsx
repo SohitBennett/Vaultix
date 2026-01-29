@@ -4,6 +4,8 @@ import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { VaultProvider } from '@/contexts/VaultContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ScrollProgress } from '@/components/effects/ScrollProgress';
+import { CustomCursor } from '@/components/effects/CustomCursor';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,7 +27,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <AuthProvider>
-            <VaultProvider>{children}</VaultProvider>
+            <VaultProvider>
+              <ScrollProgress />
+              <CustomCursor />
+              {children}
+            </VaultProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

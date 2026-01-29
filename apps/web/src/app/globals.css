@@ -271,7 +271,7 @@
   }
 
   .claude-landing-hero {
-    @apply flex-1 flex items-center justify-center py-12 px-4;
+    @apply flex-1 flex flex-col items-center justify-center py-12 px-4;
   }
 
   .claude-landing-hero-content {
@@ -389,4 +389,218 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* GSAP Animation Enhancements */
+.page-transition-wrapper {
+  @apply min-h-screen;
+}
+
+.magnetic-btn {
+  @apply cursor-pointer;
+  will-change: transform;
+}
+
+/* Enhanced Landing Page Animations */
+.claude-landing-header {
+  will-change: transform, backdrop-filter, background-color;
+  transition: backdrop-filter 0.3s ease, background-color 0.3s ease;
+}
+
+.claude-landing-hero-content {
+  perspective: 1000px;
+}
+
+.char {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+}
+
+.feature-card {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Premium Hover Effects */
+.claude-landing-hero-btn-primary,
+.claude-landing-hero-btn-secondary,
+.claude-landing-btn-primary,
+.claude-landing-btn-secondary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.claude-landing-hero-btn-primary::before,
+.claude-landing-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.claude-landing-hero-btn-primary:hover::before,
+.claude-landing-btn-primary:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Feature Card Glow Effect */
+.claude-landing-feature-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.claude-landing-feature-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, transparent 0%, rgba(99, 102, 241, 0.1) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.claude-landing-feature-card:hover::after {
+  opacity: 1;
+}
+
+/* Dark mode glow */
+.dark .claude-landing-feature-card::after {
+  background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.15) 50%, transparent 100%);
+}
+
+/* Icon Animation */
+.claude-landing-feature-icon {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.claude-landing-feature-card:hover .claude-landing-feature-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Link Hover Effect */
+.claude-landing-feature-link {
+  position: relative;
+  display: inline-block;
+}
+
+.claude-landing-feature-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.claude-landing-feature-link:hover::after {
+  width: 100%;
+}
+
+/* Gradient Text Effect */
+@keyframes gradientShift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* Smooth Page Transitions */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: pageEnter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Premium Shadow Effects */
+.premium-shadow {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 10px 40px rgba(0, 0, 0, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.05);
+}
+
+.dark .premium-shadow {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Backdrop Blur Support */
+@supports (backdrop-filter: blur(10px)) {
+  .glass-effect {
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+  }
+}
+
+/* Performance Optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* GPU Acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Ensure login/register buttons are always visible */
+.login-submit,
+button[type="submit"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Animation wrapper should not hide content */
+.login-animation-wrapper {
+  min-height: 100vh;
 }
