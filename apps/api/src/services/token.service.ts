@@ -14,7 +14,8 @@ export class TokenService {
     };
 
     return jwt.sign(payload, config.jwtAccessSecret, {
-      expiresIn: config.accessTokenExpiry,
+      // Cast required: config expiry is `string`; jwt typings expect `StringValue`.
+      expiresIn: config.accessTokenExpiry as unknown as number,
     });
   }
 
@@ -28,12 +29,13 @@ export class TokenService {
     };
 
     const token = jwt.sign(payload, config.jwtRefreshSecret, {
-      expiresIn: config.refreshTokenExpiry,
+      // Cast required: config expiry is `string`; jwt typings expect `StringValue`.
+      expiresIn: config.refreshTokenExpiry as unknown as number,
     });
 
-    // Calculate expiry date (7 days from now)
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
+    // Calculate expiry date from config so DB record always matches the JWT.
+    // e.g. "7d" -> 7 days, "24h" -> 24 hours, "30m" -> 30 minutes.
+    const expiresAt = this.parseExpiryToDate(config.refreshTokenExpiry);
 
     // Store token in database
     await RefreshToken.create({
@@ -124,7 +126,37 @@ export class TokenService {
       case 'd':
         return value * 86400;
       default:
-        return 86400; // Default 15 minutes
+        return 900; // Default: 15 minutes (matches ACCESS_TOKEN_EXPIRY default)
     }
+  }
+
+  /**
+   * Parse a JWT-style expiry string (e.g. "7d", "24h", "30m") into a future Date.
+   * Used to keep the DB token record in sync with the JWT expiry.
+   */
+  private static parseExpiryToDate(expiry: string): Date {
+    const unit = expiry.slice(-1);
+    const value = parseInt(expiry.slice(0, -1), 10);
+    const now = new Date();
+
+    switch (unit) {
+      case 's':
+        now.setSeconds(now.getSeconds() + value);
+        break;
+      case 'm':
+        now.setMinutes(now.getMinutes() + value);
+        break;
+      case 'h':
+        now.setHours(now.getHours() + value);
+        break;
+      case 'd':
+        now.setDate(now.getDate() + value);
+        break;
+      default:
+        // Fallback: 7 days
+        now.setDate(now.getDate() + 7);
+    }
+
+    return now;
   }
 }
