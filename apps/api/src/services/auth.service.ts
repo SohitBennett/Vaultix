@@ -165,7 +165,11 @@ export class AuthService {
       throw new UnauthorizedError('User not found');
     }
 
-    // Generate new tokens FIRST
+    // Revoke the old token FIRST to prevent replay if the process crashes
+    // between issuing new tokens and revoking the old one.
+    await TokenService.revokeRefreshToken(payload.tokenId);
+
+    // Now generate new tokens
     const newAccessToken = TokenService.generateAccessToken(
       user._id.toString(),
       user.email
@@ -174,8 +178,7 @@ export class AuthService {
       user._id.toString()
     );
 
-    // THEN revoke old one
-    await TokenService.revokeRefreshToken(payload.tokenId);
+    logger.debug('Refresh token rotated', { userId: user._id.toString() });
 
     return {
       accessToken: newAccessToken,
@@ -190,8 +193,11 @@ export class AuthService {
       const payload = await TokenService.verifyRefreshToken(refreshToken);
       await TokenService.revokeRefreshToken(payload.tokenId);
     } catch (error) {
-      // Even if token is invalid, consider logout successful
-      // This prevents errors when tokens are already expired
+      // Logout is intentionally idempotent — invalid/expired tokens are fine.
+      // Log at warn level so failures remain visible without leaking to clients.
+      logger.warn('Logout called with invalid or expired refresh token', {
+        error: error instanceof Error ? error.message : 'unknown',
+      });
     }
   }
 
